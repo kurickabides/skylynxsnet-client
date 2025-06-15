@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Modern ES target
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // Keep full browser and latest JS support
+    "allowJs": false, // Disable JS in favor of strict TS
+    "skipLibCheck": true, // Avoid type check on node_modules
+    "esModuleInterop": true, // Required for CommonJS interop
+    "allowSyntheticDefaultImports": true, // Allow default imports from CJS
+    "strict": true, // Enable all strict checks
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext", // Required for Vite + React
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]
+}

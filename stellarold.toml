@@ -1,0 +1,99 @@
+VERSION="1.0.0"
+
+NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2021"
+FEDERATION_SERVER="https://api.cryptoriomarket.com/federation"
+TRANSFER_SERVER="https://api.cryptoriomarket.com"
+SIGNING_KEY="GBBHQ7H4V6RRORKYLHTCAWP6MOHNORRFJSDPXDFYDGJB2LPZUFPXUEW3"
+HORIZON_URL="https://horizon.cryptoriomarket.com"
+ACCOUNTS=[
+"GDA5NSJ5AA4SD7DQ32ZE3XNRN5EDHW6P26OYRCZSUXWA5OJ6PABBAOEA",
+"GBW3KKPZJXDWIQKMN6ZTM4PFK5K5NSAREQHIBWAYT6BRAFF6OTDF754N",
+"GBDH4RAQ7GNXBHT7UCYTTZTZYJ3ZWCTGKNE7N2YTTE7ZLMQBA3246CSS"
+]
+
+[DOCUMENTATION]
+ORG_NAME="Skylynx"
+ORG_DBA="Organization MS-SQL"
+ORG_URL="https://www.cryptoriomarket.com"
+ORG_LOGO="https://www.cryptoriomarket.com/logo512.png"
+ORG_DESCRIPTION="We are creating a cool app"
+ORG_PHYSICAL_ADDRESS="P.o. box, St Helens, OR 97051, United States"
+ORG_PHYSICAL_ADDRESS_ATTESTATION="https://www.cryptoriomarket.com/address_attestation.jpg"
+ORG_PHONE_NUMBER="1 (678)-772-4308"
+ORG_PHONE_NUMBER_ATTESTATION="https://www.cryptoriomarket.com/phone_attestation.jpg"
+ORG_KEYBASE=""
+ORG_TWITTER=""
+ORG_GITHUB="kurickabides"
+ORG_OFFICIAL_EMAIL="support@cryptoriomarket.com"
+
+[[PRINCIPALS]]
+name="Cam Martin"
+email="cam@advbuss.com"
+keybase=""
+twitter=""
+github=""
+id_photo_hash="be688838ca8686e5c90689bf2ab585cef1137c999b48c70b92f67a5c34dc15697b5d11c982ed6d71be1e1e7f7b4e0733884aa97c3f7a339a8ed03577cf74be09"
+verification_photo_hash="016ba8c4cfde65af99cb5fa8b8a37e2eb73f481b3ae34991666df2e04feb6c038666ebd1ec2b6f623967756033c702dde5f423f7d47ab6ed1827ff53783731f7"
+
+[[CURRENCIES]]
+code="USD"
+issuer="GCZJM35NKGVK47BB4SPBDV25477PZYIYPVVG453LPYFNXLS3FGHDXOCM"
+display_decimals=2
+
+[[CURRENCIES]]
+code="ETH"
+issuer="GAOO3LWBC4XF6VWRP5ESJ6IBHAISVJMSBTALHOQM2EZG7Q477UWA6L7U"
+display_decimals=7
+anchor_asset_type="crypto"
+anchor_asset="ETH"
+redemption_instructions="Use SEP6 with our federation server"
+collateral_addresses=["2C1mCx3ukix1KfegAY5zgQJV7sanAciZpv"]
+collateral_address_signatures=["304502206e21798a42fae0e854281abd38bacd1aeed3ee3738d9e1446618c4571d10"]
+
+# asset with meta info
+[[CURRENCIES]]
+code="CPT"
+issuer="GBW3KKPZJXDWIQKMN6ZTM4PFK5K5NSAREQHIBWAYT6BRAFF6OTDF754N"
+display_decimals=2
+name="Captain Rio Coin"
+desc="1 CPT token entitles you to a store data up to one gigabyte of data on the cryptoriomarket network"
+conditions="There will only ever be enough tokens for the amount of gigabytes on the active network"
+image="https://static.thenounproject.com/png/2292360-200.png"
+fixed_number=10000
+
+[[VALIDATORS]]
+ALIAS="domain-au"
+DISPLAY_NAME="Domain Australia"
+HOST="core-au.cryptoriomarket.com:11625"
+PUBLIC_KEY="GD5DJQDDBKGAYNEAXU562HYGOOSYAEOO6AS53PZXBOZGCP5M2OPGMZV3"
+HISTORY="http://history.cryptoriomarket.com/prd/core-live/core_live_001/"
+
+[[VALIDATORS]]
+ALIAS="domain-sg"
+DISPLAY_NAME="Domain Singapore"
+HOST="core-sg.cryptoriomarket.com:11625"
+PUBLIC_KEY="GAENZLGHJGJRCMX5VCHOLHQXU3EMCU5XWDNU4BGGJFNLI2EL354IVBK7"
+HISTORY="http://history.cryptoriomarket.com/prd/core-live/core_live_002/"
+
+[[VALIDATORS]]
+ALIAS="domain-us"
+DISPLAY_NAME="Domain United States"
+HOST="core-us.cryptoriomarket.com:11625"
+PUBLIC_KEY="GAOO3LWBC4XF6VWRP5ESJ6IBHAISVJMSBTALHOQM2EZG7Q477UWA6L7U"
+HISTORY="http://history.cryptoriomarket.com/prd/core-live/core_live_003/"
+
+# optional extra information for humans
+# Useful place for anchors to detail various policies and required info
+
+###################################
+# Required compliance fields:
+#      name=<recipient name>
+#      addr=<recipient address>
+# Federation Format:
+#        <phone number>*anchor.com
+#        Forwarding supported by sending to: forward*anchor.com
+#           forward_type=bank_account
+#           swift=<swift code of receiving bank>
+#           acct=<recipient account number at receiving bank>
+# Minimum Amount Forward: $2 USD
+# Maximum Amount Forward: $10000 USD
