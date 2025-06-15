@@ -4,7 +4,7 @@
 // Description: Base app layout with Header, Sidebar, and Footer
 // ================================================
 
-import React, { FC, ReactNode, useReducer, useState } from "react";
+import React, { FC, ReactNode, useReducer } from "react";
 import { CssBaseline } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Header from "./header";
@@ -29,7 +29,6 @@ const Layout: FC<LayoutProps> = ({
   const [drawerOpen, toggleDrawer] = useReducer((state) => !state, true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  //const [activatingConnector, setActivatingConnector] = useState<any>();
 
   const connectLoginHandler = async () => {
     try {
@@ -51,6 +50,9 @@ const Layout: FC<LayoutProps> = ({
     dispatch(authActions.logout());
     navigate("/");
   };
+
+  // 🔍 Debug drawer open state
+  console.log("Layout drawerOpen:", drawerOpen);
 
   return (
     <LayoutRoot>
@@ -84,3 +86,4 @@ const Layout: FC<LayoutProps> = ({
 };
 
 export default Layout;
+  

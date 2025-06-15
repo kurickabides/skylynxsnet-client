@@ -4,14 +4,14 @@
 // ================================================
 
 import { styled } from "@mui/material/styles";
-import { Sketch_HEIGHT } from "../../../helpers/constants";
+import layoutMixins from "../../../theme/themeMixins";
 
 export const SketchRoot = styled("div")(({ theme }) => ({
   flex: 1,
   display: "flex",
   justifyContent: "center",
   background: theme.palette.background.paper,
-  minHeight: Sketch_HEIGHT,
+  minHeight: layoutMixins.sketch.height,
 }));
 
 export const SketchFooter = styled("div")(({ theme }) => ({

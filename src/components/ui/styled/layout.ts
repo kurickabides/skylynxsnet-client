@@ -5,7 +5,7 @@
 
 import { styled } from "@mui/material/styles";
 import { List } from "@mui/material";
-import { DRAWER_WIDTH, FOOTER_HEIGHT } from "../../../helpers/constants";
+import layoutMixins from "../../../theme/themeMixins";
 
 // Root container for the layout
 export const LayoutRoot = styled("div")(({ theme }) => ({
@@ -18,9 +18,9 @@ export const LayoutRoot = styled("div")(({ theme }) => ({
 export const LayoutContent = styled("main")(({ theme }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  minHeight: `calc(100vh - ${FOOTER_HEIGHT}px)`,
+  minHeight: `calc(100vh - ${layoutMixins.footer.height}px)`,
   background: theme.palette.background.paper,
-  marginLeft: theme.spacing(7) + 1,
+  marginLeft: layoutMixins.drawer.closed.width ,
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(9) + 1,
   },
@@ -32,7 +32,7 @@ export const LayoutContent = styled("main")(({ theme }) => ({
 
 // Main content when drawer is open
 export const LayoutContentShift = styled(LayoutContent)(({ theme }) => ({
-  marginLeft: DRAWER_WIDTH,
+  marginLeft: layoutMixins.drawer.open.width,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.easeOut,
     duration: theme.transitions.duration.enteringScreen,

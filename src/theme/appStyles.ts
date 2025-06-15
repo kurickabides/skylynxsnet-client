@@ -115,7 +115,8 @@ export const ToggleButton = styled("button")(({ theme }) => ({
 }));
 
 export const MenuButton = styled(IconButton)(({ theme }) => ({
-  marginRight: theme.spacing(4.5), // equivalent to 36px
+  marginleft: layoutMixins.drawer.closed.width,
+  marginRight: theme.spacing(7), // equivalent to 36px
   display: "inline-flex",
   color: theme.palette.primary.contrastText,
 }));
@@ -230,8 +231,8 @@ export const HeaderAppBar = styled(AppBar)(({ theme }) => ({
 
 export const HeaderAppBarShift = styled(AppBar)(({ theme }) => ({
   height: theme.mixins.toolbar.minHeight,
-  marginLeft: `${layoutMixins.drawer.width}px`,
-  width: `calc(100% - ${layoutMixins.drawer.width}px)`,
+  marginLeft: `${layoutMixins.drawer.open.width}px`,
+  width: `calc(100% - ${layoutMixins.drawer.open.width}px)`,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,

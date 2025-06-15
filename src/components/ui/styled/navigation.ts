@@ -15,12 +15,14 @@ export const DrawerToolbar = styled("div")(({ theme }) => ({
 export const StyledDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })<{ open: boolean }>(({ theme, open }) => ({
-  width: open ? layoutMixins.drawer.width : theme.spacing(7) + 1,
+  width: open
+    ? layoutMixins.drawer.open.width
+    : layoutMixins.drawer.closed.width,
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
   "& .MuiDrawer-paper": {
-    width: open ? layoutMixins.drawer.width : theme.spacing(7) + 1,
+    width: open ? layoutMixins.drawer.open.width : layoutMixins.drawer.closed.width,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: open
