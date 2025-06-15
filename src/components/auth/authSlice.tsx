@@ -26,6 +26,13 @@ const emptyProfile = {
   updatedAt: "",
 };
 
+const userLoggedIN = {
+  id: "",
+  token: "",
+  roles: [],
+  profile: emptyProfile,
+};
+
 // Initial state
 const initialState: AuthTokenState = {
   token: "",
@@ -33,7 +40,7 @@ const initialState: AuthTokenState = {
   remainingTime: 0,
   isAuthLoading: false,
   provider: "SkylynxNet",
-  user: emptyProfile,
+  user: userLoggedIN,
   error: "",
 };
 
@@ -74,7 +81,7 @@ const authSlice = createSlice({
     logout(state) {
       state.token = "";
       state.isLoggedIn = false;
-      state.user = emptyProfile;
+      state.user = userLoggedIN;
       state.isAuthLoading = false;
       state.error = "";
       localStorage.removeItem("token");
