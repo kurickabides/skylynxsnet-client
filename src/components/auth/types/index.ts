@@ -93,7 +93,6 @@ export interface SkylynxNet_PasswordResetResponse {
 
 export interface SkylynxNet_LoggedINUser {
   id: string;
-  email: string;
   roles: string[];
   profile: SkylynxNet_UserProfile;
 }
