@@ -48,7 +48,13 @@ export interface HeaderMinimalProps {
   toggleTheme: () => void;
   useDefaultTheme: boolean;
 }
-  export type ToastStatus = "success" | "loading" | "idle" | "error";
+  export type ToastStatus =
+    | "success"
+    | "loading"
+    | "idle"
+    | "info"
+    | "warning"
+    | "error";
 export interface ToastItem {
   status: ToastStatus;
   message: string;
