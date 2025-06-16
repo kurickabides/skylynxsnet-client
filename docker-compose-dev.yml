@@ -21,6 +21,7 @@ services:
       - Skylynx_API_Server_URL=${Skylynx_API_Server_URL}
       - Skylynx_Portal_APIKey=${Skylynx_Portal_APIKey}
       - Skylynx_Portal_Name=${Skylynx_Portal_Name}
+      - SkylynxNet_TIMEOUT=${SkylynxNet_TIMEOUT}      
       - PLAID_CLIENT_ID=${PLAID_CLIENT_ID}
       - PLAID_SECRET=${PLAID_SECRET}
       - Stellar_IssuerAct=${Stellar_IssuerAct}
@@ -31,7 +32,7 @@ services:
 
     volumes:
       - ./src:/app/src
-      - ./build:/app/build
+      - ./dist:/app/dist
     networks:
       - silverlining
 

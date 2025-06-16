@@ -7,12 +7,11 @@ import {
   SkylynxNet_AuthSignUpResponse,
   AuthTokenState,
   SkylynxNet_LoggedINUser,
-  SkylynxNet_UserProfile
+  SkylynxNet_UserProfile,
 } from "./types";
 import * as authApi from "./authAPI";
+import { saveAuthState, loadAuthState } from "../../helpers/persistAuth";
 
-// Initial empty profile
- // Optional fields initialized this is the fields list flattened starting at phoneNumber
 const emptyProfile: SkylynxNet_UserProfile = {
   userId: "",
   username: "",
@@ -26,7 +25,7 @@ const emptyProfile: SkylynxNet_UserProfile = {
   portalCreatedDate: "",
   providerId: "",
   createdAt: "",
-  updatedAt: "", 
+  updatedAt: "",
   phoneNumber: "",
   portalDescription: "",
   firstName: "",
@@ -49,15 +48,14 @@ const emptyProfile: SkylynxNet_UserProfile = {
   billingStateProvinceId: "",
 };
 
-
 const userLoggedIN: SkylynxNet_LoggedINUser = {
   id: "",
   roles: [],
   profile: emptyProfile,
 };
 
-// Initial state
-const initialState: AuthTokenState = {
+// Fallback default
+const fallbackState: AuthTokenState = {
   token: "",
   isLoggedIn: false,
   remainingTime: 0,
@@ -67,7 +65,9 @@ const initialState: AuthTokenState = {
   error: "",
 };
 
-// Async login action
+// Initial state from encrypted localStorage or fallback
+const initialState: AuthTokenState = loadAuthState() || fallbackState;
+
 export const login = createAsyncThunk<
   SkylynxNet_AuthLoginResponse,
   SkylynxNet_AuthLoginReq,
@@ -83,7 +83,6 @@ export const login = createAsyncThunk<
   }
 });
 
-// Async signup action
 export const signup = createAsyncThunk<
   SkylynxNet_AuthSignUpResponse,
   SkylynxNet_AuthSignUpReq,
@@ -107,7 +106,7 @@ const authSlice = createSlice({
       state.user = userLoggedIN;
       state.isAuthLoading = false;
       state.error = "";
-      localStorage.removeItem("token");
+      localStorage.removeItem("auth");
     },
   },
   extraReducers: (builder) => {
@@ -123,23 +122,28 @@ const authSlice = createSlice({
           state.token = token;
           state.isLoggedIn = true;
           state.error = "";
+
           console.log(
             "✅ login.fulfilled called — setting isLoggedIn ",
             state.isLoggedIn
           );
-             
-          // Minimal user profile — we can update this later after fetching user profile
+
           state.user = {
             id: "",
             roles: roles || [],
             profile: emptyProfile,
           };
-          // 
+
+          // Simulated session duration: 1 hour
+          state.remainingTime = 60 * 60 * 1000;
+
+          // Save encrypted state
+          saveAuthState(state);
+
           console.log(
             "✅ login.fulfilled isLoggedIn after user update is",
             state.isLoggedIn
           );
-          localStorage.setItem("token", token);
         } else {
           state.error = "Login did not return a token";
         }
