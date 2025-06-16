@@ -11,20 +11,24 @@ import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { CardHeader, Button } from "@mui/material";
 import Loading from "../ui/LoadingProgessBar";
 import { login, signup } from "./authSlice";
-import { AuthTokenState } from "./types";
 import Toasted from "../ui/toast";
 
+// Styles
 import { AuthCard, AuthCardContent, AuthLabel } from "./styled/authForm";
-import { Input, Actions, ToggleButton } from "../../theme/appStyles";
+import {
+  Input,
+  Actions,
+  ToggleButton,
+  FullPageWrapper,
+} from "../../theme/appStyles";
+
 
 interface AuthFormProps {}
 
 const AuthForm: FC<AuthFormProps> = (): React.ReactElement => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isLoggedIn, isAuthLoading, error } = useAppSelector(
-    (state): AuthTokenState => state.auth
-  );
+  const auth = useAppSelector((state) => state.auth);
 
   const userEmailRef = useRef<HTMLInputElement>(null);
   const userPasswordRef = useRef<HTMLInputElement>(null);
@@ -36,17 +40,19 @@ const AuthForm: FC<AuthFormProps> = (): React.ReactElement => {
   });
 
   useEffect(() => {
-    if (isLoggedIn) {
+    console.log("🔁 the auth state in appform is", auth);
+
+    if (auth.isLoggedIn && !auth.isAuthLoading) {
       navigate("/dashboard");
       setToast({
         open: true,
         message: "Authentication successful",
         status: "success",
       });
-    } else if (error) {
-      setToast({ open: true, message: error, status: "error" });
+    } else if (!auth.isLoggedIn && auth.error) {
+      setToast({ open: true, message: auth.error, status: "error" });
     }
-  }, [isLoggedIn, error, navigate]);
+  }, [auth, navigate]);
 
   const logInSubmitHandler = async (event: FormEvent) => {
     event.preventDefault();
@@ -69,7 +75,7 @@ const AuthForm: FC<AuthFormProps> = (): React.ReactElement => {
   };
 
   return (
-    <>
+    <FullPageWrapper>
       {toast.open && <Toasted toastMessage={toast} />}
       <AuthCard>
         <CardHeader title={isLogin ? "Login" : "Signup"} />
@@ -88,19 +94,19 @@ const AuthForm: FC<AuthFormProps> = (): React.ReactElement => {
             />
           </AuthCardContent>
           <Actions>
-            {!isAuthLoading && (
+            {!auth.isAuthLoading && (
               <Button type="submit" variant="contained">
                 {isLogin ? "Login" : "Signup"}
               </Button>
             )}
-            {isAuthLoading && <Loading />}
+            {auth.isAuthLoading && <Loading />}
             <ToggleButton onClick={switchAuthModeHandler}>
               {isLogin ? "Switch to Signup" : "Switch to Login"}
             </ToggleButton>
           </Actions>
         </form>
       </AuthCard>
-    </>
+    </FullPageWrapper>
   );
 };
 

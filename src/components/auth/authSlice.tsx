@@ -6,11 +6,14 @@ import {
   SkylynxNet_AuthSignUpReq,
   SkylynxNet_AuthSignUpResponse,
   AuthTokenState,
+  SkylynxNet_LoggedINUser,
+  SkylynxNet_UserProfile
 } from "./types";
 import * as authApi from "./authAPI";
 
 // Initial empty profile
-const emptyProfile = {
+ // Optional fields initialized this is the fields list flattened starting at phoneNumber
+const emptyProfile: SkylynxNet_UserProfile = {
   userId: "",
   username: "",
   email: "",
@@ -23,12 +26,32 @@ const emptyProfile = {
   portalCreatedDate: "",
   providerId: "",
   createdAt: "",
-  updatedAt: "",
+  updatedAt: "", 
+  phoneNumber: "",
+  portalDescription: "",
+  firstName: "",
+  lastName: "",
+  photo: "",
+  mobilePhone: "",
+  dateOfBirth: "",
+  preferredLanguage: "",
+  addressId: "",
+  mailingAddress1: "",
+  mailingAddress2: "",
+  city: "",
+  stateProvinceId: "",
+  zip: "",
+  billingAddressId: "",
+  billingAddress1: "",
+  billingAddress2: "",
+  billingCity: "",
+  billingZip: "",
+  billingStateProvinceId: "",
 };
 
-const userLoggedIN = {
+
+const userLoggedIN: SkylynxNet_LoggedINUser = {
   id: "",
-  token: "",
   roles: [],
   profile: emptyProfile,
 };
@@ -95,11 +118,28 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         const { token, roles } = action.payload;
         state.isAuthLoading = false;
+
         if (token) {
           state.token = token;
           state.isLoggedIn = true;
           state.error = "";
-          // Keep existing user or set an empty default until profile fetched
+          console.log(
+            "✅ login.fulfilled called — setting isLoggedIn ",
+            state.isLoggedIn
+          );
+             
+          // Minimal user profile — we can update this later after fetching user profile
+          state.user = {
+            id: "",
+            roles: roles || [],
+            profile: emptyProfile,
+          };
+          // 
+          console.log(
+            "✅ login.fulfilled isLoggedIn after user update is",
+            state.isLoggedIn
+          );
+          localStorage.setItem("token", token);
         } else {
           state.error = "Login did not return a token";
         }

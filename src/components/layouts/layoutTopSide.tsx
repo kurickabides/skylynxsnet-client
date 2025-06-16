@@ -9,18 +9,18 @@ import { useNavigate } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
 
 // Components
-import Header from "./header";
-import Navigation from "./navigation";
-import Footer from "./footer";
+import Header from "../ui/header";
+import Navigation from "../ui/navigation";
+import Footer from "../ui/footer";
 
 // Redux
 import { useAppDispatch } from "../../hooks/reduxHooks";
 import { authActions } from "../auth/authSlice";
-import { xmlActions } from "../stellar/xlmSlice";
-import { LoadAccountAsync } from "../stellar/stellarAPI";
+//import { xmlActions } from "../stellar/xlmSlice";
+//import { LoadAccountAsync } from "../stellar/stellarAPI";
 
 // Models
-import { Rabit_ConnectResult } from "../stellar/xlmModels";
+//import { Rabit_ConnectResult } from "../stellar/xlmModels";
 
 // Styles
 import {
@@ -31,7 +31,7 @@ import {
 } from "./styled/layoutTopSide";
 
 // Types
-import { LayoutProps } from "./types";
+import { LayoutProps } from "../ui/types";
 
 declare global {
   interface Window {

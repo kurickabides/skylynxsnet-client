@@ -10,9 +10,9 @@ import { CssBaseline } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import HeaderComponent from "./HeaderComponent";
-import Navigation from "./navigation";
-import Footer from "./footer";
+import HeaderComponent from "../ui/HeaderComponent";
+import Navigation from "../ui/navigation";
+import Footer from "../ui/footer";
 
 // Redux
 import { authActions } from "../auth/authSlice";
@@ -27,7 +27,7 @@ import {
 } from "./styled/layoutSideView";
 
 // Types
-import { LayoutSideViewProps } from "./types";
+import { LayoutSideViewProps } from "../ui/types";
 
 const LayoutSideView: FC<LayoutSideViewProps> = ({
   toggleTheme,

@@ -37,6 +37,21 @@ export const PaperContainer = styled(Container)(({ theme }) => ({
   flexDirection: "column",
 }));
 
+export const FullPageWrapper = styled("div")(({ theme }) => ({
+  height: "100vh",
+  width: "100vw",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundColor: theme.palette.background.default,
+}));
+
+export const AuthPageWrapper = styled("main")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "flex-start",
+}));
+
 export const ContentWrapper = styled(CardContent)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -84,7 +99,7 @@ export const Label = styled("label")(({ theme }) => ({
 
 export const Input = styled("input")(({ theme }) => ({
   borderRadius: "4px",
-  width: "100%",
+  width: "75%",
   textAlign: "left",
   padding: theme.spacing(2),
 }));

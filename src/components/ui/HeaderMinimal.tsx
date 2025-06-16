@@ -22,7 +22,7 @@ import LogoutIN from "@mui/icons-material/LockOpenOutlined";
 import { APP_TITLE } from "../../helpers/constants";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import { selectAuth } from "../auth/authSlice";
-import { selectStellar } from "../stellar/xlmSlice";
+//import { selectStellar } from "../stellar/xlmSlice";
 import { HeaderMinimalProps } from "./types/";
 import {
   HeaderAppBar,

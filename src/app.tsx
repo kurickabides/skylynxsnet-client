@@ -1,5 +1,3 @@
-// src/App.tsx
-
 import React, { FC, ReactElement, useReducer, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "./hooks/reduxHooks";
@@ -21,7 +19,8 @@ import RouteItem from "./config/RouteItem";
 import { ToastItem } from "./components/ui/types";
 import { APP_TITLE } from "./helpers/constants";
 import { ethers } from "ethers";
-
+import AuthForm from "./components/auth/authForm"; // ✅ Add AuthForm route
+import  AuthLayout  from "./components/layouts/AuthLayout";
 const AppContext = React.createContext(null);
 
 // Web3 setup
@@ -82,41 +81,63 @@ function App() {
             {uiState.notification?.status !== "idle" && (
               <Toast toastMessage={toastMessageState} />
             )}
-            <Layout toggleTheme={toggle} useDefaultTheme={useDefaultTheme}>
-              <Routes>
-                {routes.map((route: RouteItem) =>
-                  route.subRoutes ? (
-                    route.subRoutes.map((item: RouteItem) =>
-                      item.path ? (
-                        <Route
-                          key={item.key as string}
-                          path={item.path}
-                          element={
-                            item.component ? (
-                              <item.component />
-                            ) : (
-                              <DefaultComponent />
-                            )
-                          }
-                        />
-                      ) : null
-                    )
-                  ) : route.path ? (
-                    <Route
-                      key={route.key as string}
-                      path={route.path}
-                      element={
-                        route.component ? (
-                          <route.component />
-                        ) : (
-                          <DefaultComponent />
-                        )
-                      }
-                    />
-                  ) : null
-                )}
-              </Routes>
-            </Layout>
+
+            <Routes>
+              {/* ✅ Login route WITHOUT layout */}
+              <Route
+                path="/auth"
+                element={
+                  <AuthLayout>
+                    <AuthForm />
+                  </AuthLayout>
+                }
+              />
+
+              {/* ✅ All other routes wrapped in layout */}
+              <Route
+                path="*"
+                element={
+                  <Layout
+                    toggleTheme={toggle}
+                    useDefaultTheme={useDefaultTheme}
+                  >
+                    <Routes>
+                      {routes.map((route: RouteItem) =>
+                        route.subRoutes ? (
+                          route.subRoutes.map((item: RouteItem) =>
+                            item.path ? (
+                              <Route
+                                key={item.key as string}
+                                path={item.path}
+                                element={
+                                  item.component ? (
+                                    <item.component />
+                                  ) : (
+                                    <DefaultComponent />
+                                  )
+                                }
+                              />
+                            ) : null
+                          )
+                        ) : route.path ? (
+                          <Route
+                            key={route.key as string}
+                            path={route.path}
+                            element={
+                              route.component ? (
+                                <route.component />
+                              ) : (
+                                <DefaultComponent />
+                              )
+                            }
+                          />
+                        ) : null
+                      )}
+                    </Routes>
+                  </Layout>
+                }
+              />
+            </Routes>
           </ThemeProvider>
         </BrowserRouter>
       </Web3ReactProvider>

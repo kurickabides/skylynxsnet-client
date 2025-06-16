@@ -15,7 +15,7 @@ export const LayoutRoot = styled("div")(({ theme }) => ({
 export const LayoutContent = styled("main")(({ theme }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  minHeight: `calc(100vh - ${layoutMixins.footer.height}px)`,
+  minHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
   background: theme.palette.background.paper,
   marginLeft: theme.spacing(7) + 1,
   [theme.breakpoints.up("sm")]: {
