@@ -21,7 +21,7 @@ import DefaultIcon from "@mui/icons-material/AccountBox";
 import { useLocation } from "react-router-dom";
 import { AppMenuProps } from "./types";
 import MenuItem from "./menuItem";
-import { routeConfig } from "../../config/routeConfig";
+import { routeConfig } from "../../config/routeUserConfig";
 import {
   SectionDivider,
   IndentedList,

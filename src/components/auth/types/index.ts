@@ -34,17 +34,38 @@ export interface UserRole {
 }
 
 // ✅ Used in sign-up and updates (creation only requires ID and value)
+// Server-persisted
 export interface ProfileField {
+  FieldProviderID: string;
+  FieldTypeID: string;
   FieldID: string;
   FieldValue: string;
 }
 
+
 // ✅ Used when displaying user data (includes field label)
-export interface UserProfileField {
-  FieldID: string;
-  FieldValue: string;
-  FieldName?: string;
-}
+// UI-level
+export type UserProfileField = {
+  FieldProviderID: string; // Links the field to a given provider (e.g., Portal/User profile)
+  FieldID: string; // Unique field identifier
+  FieldValue: string; // Current value
+  FieldName: string; // Label shown in form
+  FieldType: // Data type used for input rendering and validation
+  | "Text"
+    | "Phone"
+    | "Email"
+    | "Date"
+    | "Boolean"
+    | "Number"
+    | "Link"
+    | "Select";
+  Required?: boolean; // Optional: is field required
+  Options?: Array<{
+    // Only used for Select dropdowns
+    key: string;
+    value: string;
+  }>;
+};
 
 
 export type ProfileFields = ProfileField[];

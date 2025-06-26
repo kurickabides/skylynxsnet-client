@@ -9,7 +9,7 @@ import Settings from "../pages/settings";
 import WalletPage from "../pages/accounts/walletsAccounts";
 import RouteItem from "./RouteItem";
 
-export const routeConfig: RouteItem[] = [
+export const routeAdminConfig: RouteItem[] = [
   {
     key: "router-home",
     title: "Home",
