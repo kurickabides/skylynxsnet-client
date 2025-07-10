@@ -6,11 +6,11 @@ import { ColorTheme } from "./types";
 
 const getThemeColors = (theme: ColorTheme, variant: "light" | "dark") => {
   switch (theme) {
-    case "fieldPro":
+    case "FeldPro":
       return fieldProColors.getColors(variant);
-    case "cryoRIO":
+    case "CryoRIO":
       return cryoRIOColors.getColors(variant);
-    case "default":
+    case "Default":
     default:
       return defaultThemeColors.getColors(variant);
   }

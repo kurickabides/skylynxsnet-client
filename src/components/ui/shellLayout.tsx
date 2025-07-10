@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "./header";
 import Navigation from "./navigation";
 import Footer from "./footer";
-import { authActions } from "../../components/auth/authSlice";
+import { authActions } from "../auth/authSlice";
 import { useAppDispatch } from "../../hooks/reduxHooks";
 import {
   LayoutRoot,
@@ -21,7 +21,7 @@ import {
 } from "./styled/layout";
 import { LayoutProps } from "./types";
 
-const Layout: FC<LayoutProps> = ({
+const ShellLayout: FC<LayoutProps> = ({
   toggleTheme,
   useDefaultTheme,
   children,
@@ -85,5 +85,5 @@ const Layout: FC<LayoutProps> = ({
   );
 };
 
-export default Layout;
+export default ShellLayout;
   

@@ -17,7 +17,7 @@ import { APP_TITLE, PAGE_TITLE_SETTINGS } from "../helpers/constants";
 // Layout styles
 import { FlexRowBetween } from "../theme/appStyles"; // Flex layout for spacing
 
-const SettingsPageLayout: FC<{}> = (): ReactElement => {
+const SettingsPage: FC<{}> = (): ReactElement => {
   return (
     <>
       <Helmet>
@@ -44,4 +44,4 @@ const SettingsPageLayout: FC<{}> = (): ReactElement => {
   );
 };
 
-export default SettingsPageLayout;
+export default SettingsPage;

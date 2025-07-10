@@ -1,4 +1,4 @@
 export type ColorTheme =
-  | "default" // Default theme
-  | "fieldPro" // fieldPro theme
-  | "cryoRIO"; // cryoRIO theme
+  | "Default" // Default theme
+  | "FeldPro" // fieldPro theme
+  | "CryoRIO"; // cryoRIO theme

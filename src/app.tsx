@@ -11,7 +11,7 @@ import { Helmet } from "react-helmet";
 import { selectUI } from "./components/ui/uiSlice";
 import { authActions, selectAuth } from "./components/auth/authSlice";
 import Toast from "./components/ui/toast";
-import Layout from "./components/ui/layout";
+import ShellLayout from "./components/ui/shellLayout";
 import { Loadroutes } from "./config/loadroutes";
 import { createDarkTheme, createLightTheme } from "./theme/appTheme";
 import { Web3ReactProvider } from "@web3-react/core";
@@ -19,8 +19,8 @@ import RouteItem from "./config/RouteItem";
 import { ToastItem } from "./components/ui/types";
 import { APP_TITLE } from "./helpers/constants";
 import { ethers } from "ethers";
-import AuthForm from "./components/auth/authForm"; // ✅ Add AuthForm route
-import  AuthLayout  from "./components/layouts/AuthLayout";
+import AuthPage from "./pages/authPage"
+import  AuthLayout  from "./components/layouts/authLayout";
 const AppContext = React.createContext(null);
 
 // Web3 setup
@@ -44,7 +44,7 @@ function App() {
   const logoutTimer = useRef<NodeJS.Timeout | null>(null);
 
   const theme: Theme = responsiveFontSizes(
-    useDefaultTheme ? createLightTheme("default") : createDarkTheme("default")
+    useDefaultTheme ? createLightTheme("Default") : createDarkTheme("Default")
   );
 
   const routes: RouteItem[] = Loadroutes();
@@ -88,7 +88,7 @@ function App() {
                 path="/auth"
                 element={
                   <AuthLayout>
-                    <AuthForm />
+                    <AuthPage />
                   </AuthLayout>
                 }
               />
@@ -97,7 +97,7 @@ function App() {
               <Route
                 path="*"
                 element={
-                  <Layout
+                  <ShellLayout
                     toggleTheme={toggle}
                     useDefaultTheme={useDefaultTheme}
                   >
@@ -134,7 +134,7 @@ function App() {
                         ) : null
                       )}
                     </Routes>
-                  </Layout>
+                  </ShellLayout>
                 }
               />
             </Routes>
