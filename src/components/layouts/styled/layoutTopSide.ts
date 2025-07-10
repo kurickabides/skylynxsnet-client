@@ -1,26 +1,23 @@
 // ================================================
-// ✅ Styles: Layout
-// File: styled/layout.ts
+// ✅ Styled: layoutTopSide
+// Description: Styled layout components for LayoutTopSide
 // ================================================
 
 import { styled } from "@mui/material/styles";
-import { List } from "@mui/material";
 import layoutMixins from "../../../theme/themeMixins";
 
-// Root container for the layout
 export const LayoutRoot = styled("div")(({ theme }) => ({
   flex: 1,
   display: "flex",
   flexDirection: "column",
 }));
 
-// Main content area with default left margin
 export const LayoutContent = styled("main")(({ theme }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  minHeight: `calc(100vh - ${layoutMixins.footer.height}px)`,
+  minHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight}px)`,
   background: theme.palette.background.paper,
-  marginLeft: layoutMixins.drawer.closed.width ,
+  marginLeft: theme.spacing(7) + 1,
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(9) + 1,
   },
@@ -30,7 +27,6 @@ export const LayoutContent = styled("main")(({ theme }) => ({
   }),
 }));
 
-// Main content when drawer is open
 export const LayoutContentShift = styled(LayoutContent)(({ theme }) => ({
   marginLeft: layoutMixins.drawer.open.width,
   transition: theme.transitions.create("margin", {
@@ -39,15 +35,6 @@ export const LayoutContentShift = styled(LayoutContent)(({ theme }) => ({
   }),
 }));
 
-// Offset to match toolbar height
-export const LayoutToolbarOffset = styled("div")(({ theme }) => ({
+export const ToolbarOffset = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
-}));
-
-// Optional footer container
-export const FooterContainer = styled("footer")(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  background: theme.palette.background.default,
-  padding: theme.spacing(2),
 }));

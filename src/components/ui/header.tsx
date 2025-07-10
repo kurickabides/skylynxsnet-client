@@ -16,7 +16,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness3Icon from "@mui/icons-material/Brightness3";
-import UserIcon from "@mui/icons-material/AccountCircle";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/LockOutlined";
 import LogoutIN from "@mui/icons-material/LockOpenOutlined";
 import { useNavigate } from "react-router-dom";
@@ -108,7 +108,15 @@ const Header: FC<HeaderProps> = ({
               <LogoutIcon />
             </IconButton>
             <IconButton size="small" color="inherit">
-              <UserIcon />
+              {authState.user.profile.photo ? (
+                <img
+                  src={authState.user.profile.photo}
+                  alt="User"
+                  style={{ width: 32, height: 32, borderRadius: "50%" }}
+                />
+              ) : (
+                <AccountCircle />
+              )}
             </IconButton>
           </>
         )}

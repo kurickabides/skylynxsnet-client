@@ -6,11 +6,13 @@ import {
   SkylynxNet_AuthSignUpReq,
   SkylynxNet_AuthSignUpResponse,
   AuthTokenState,
+  SkylynxNet_LoggedINUser,
+  SkylynxNet_UserProfile,
 } from "./types";
 import * as authApi from "./authAPI";
+import { saveAuthState, loadAuthState } from "../../helpers/persistAuth";
 
-// Initial empty profile
-const emptyProfile = {
+const emptyProfile: SkylynxNet_UserProfile = {
   userId: "",
   username: "",
   email: "",
@@ -24,17 +26,36 @@ const emptyProfile = {
   providerId: "",
   createdAt: "",
   updatedAt: "",
+  phoneNumber: "",
+  portalDescription: "",
+  firstName: "",
+  lastName: "",
+  photo: "",
+  mobilePhone: "",
+  dateOfBirth: "",
+  preferredLanguage: "",
+  addressId: "",
+  mailingAddress1: "",
+  mailingAddress2: "",
+  city: "",
+  stateProvinceId: "",
+  zip: "",
+  billingAddressId: "",
+  billingAddress1: "",
+  billingAddress2: "",
+  billingCity: "",
+  billingZip: "",
+  billingStateProvinceId: "",
 };
 
-const userLoggedIN = {
+const userLoggedIN: SkylynxNet_LoggedINUser = {
   id: "",
-  token: "",
   roles: [],
   profile: emptyProfile,
 };
 
-// Initial state
-const initialState: AuthTokenState = {
+// Fallback default
+const fallbackState: AuthTokenState = {
   token: "",
   isLoggedIn: false,
   remainingTime: 0,
@@ -44,7 +65,9 @@ const initialState: AuthTokenState = {
   error: "",
 };
 
-// Async login action
+// Initial state from encrypted localStorage or fallback
+const initialState: AuthTokenState = loadAuthState() || fallbackState;
+
 export const login = createAsyncThunk<
   SkylynxNet_AuthLoginResponse,
   SkylynxNet_AuthLoginReq,
@@ -60,7 +83,6 @@ export const login = createAsyncThunk<
   }
 });
 
-// Async signup action
 export const signup = createAsyncThunk<
   SkylynxNet_AuthSignUpResponse,
   SkylynxNet_AuthSignUpReq,
@@ -84,7 +106,7 @@ const authSlice = createSlice({
       state.user = userLoggedIN;
       state.isAuthLoading = false;
       state.error = "";
-      localStorage.removeItem("token");
+      localStorage.removeItem("auth");
     },
   },
   extraReducers: (builder) => {
@@ -95,11 +117,33 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         const { token, roles } = action.payload;
         state.isAuthLoading = false;
+
         if (token) {
           state.token = token;
           state.isLoggedIn = true;
           state.error = "";
-          // Keep existing user or set an empty default until profile fetched
+
+          console.log(
+            "✅ login.fulfilled called — setting isLoggedIn ",
+            state.isLoggedIn
+          );
+
+          state.user = {
+            id: "",
+            roles: roles || [],
+            profile: emptyProfile,
+          };
+
+          // Simulated session duration: 1 hour
+          state.remainingTime = 60 * 60 * 1000;
+
+          // Save encrypted state
+          saveAuthState(state);
+
+          console.log(
+            "✅ login.fulfilled isLoggedIn after user update is",
+            state.isLoggedIn
+          );
         } else {
           state.error = "Login did not return a token";
         }

@@ -17,7 +17,7 @@ const Navigation: FC<NavigationProps> = ({
           <ChevronLeftIcon htmlColor="#fff" />
         </IconButton>
       </DrawerToolbar>
-      <AppMenu />
+      <AppMenu open={open} />
     </StyledDrawer>
   );
 };

@@ -1,5 +1,4 @@
 // theme/themeMixins.ts
-
 import { CSSObject } from "@mui/material/styles";
 
 const toolbarMixin: CSSObject = {
@@ -29,8 +28,14 @@ const ContainerMixins = {
     width: 440,
   },
   drawer: {
-    height: 0,
-    width: 250,
+    open: {
+      height: 0,
+      width: 250,
+    },
+    closed: {
+      height: 0,
+      width: 75,
+    },
   },
   page: {
     height: 0,

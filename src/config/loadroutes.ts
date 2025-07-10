@@ -2,7 +2,7 @@
 // config/loadroutes.ts
 import { useSelector } from "react-redux";
 import { RootState } from "../appStore/store"; // Import RootState
-import { routeConfig } from "./routeConfig"; // Import route config
+import { routeConfig } from "./routeUserConfig"; // Import route config
 
 // Define Loadroutes function
 export const Loadroutes = () => {

@@ -6,6 +6,7 @@
 
 import { styled } from "@mui/material/styles";
 import { Card, CardContent } from "@mui/material";
+import layoutMixins from "../../../../theme/themeMixins";
 
 export const AuthCard = styled(Card)(({ theme }) => ({
   width: "95%",

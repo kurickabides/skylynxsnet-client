@@ -3,11 +3,8 @@
 // File: components/ui/styled/errorModal.ts
 // ================================================
 import { styled } from "@mui/material/styles";
-import {
-  ERRORWIN_TOP,
-  ERRORWIN_LEFT,
-  ERRORWIN_WIDTH,
-} from "../../../helpers/constants";
+import layoutMixins from "../../../theme/themeMixins";
+
 
 export const Backdrop = styled("div")(({ theme }) => ({
   position: "fixed",
@@ -22,9 +19,9 @@ export const Backdrop = styled("div")(({ theme }) => ({
 
 export const ErrorPopup = styled("div")(({ theme }) => ({
   position: "fixed",
-  top: ERRORWIN_TOP,
-  left: `calc(50% - ${ERRORWIN_LEFT})`,
-  width: ERRORWIN_WIDTH,
+  top: layoutMixins.errorWindow.top,
+  left: `calc(50% - ${layoutMixins.errorWindow.left})`,
+  width: layoutMixins.errorWindow.width,
   background: theme.palette.info.light,
   padding: theme.spacing(3),
   zIndex: 1000,

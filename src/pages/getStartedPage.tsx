@@ -1,7 +1,7 @@
-import GetStartedContent from '../components/home/aboutUs';
+import AboutUsPageContent from "../components/home/aboutUs";
 
-const GetStartedPage = () => {
-  return <GetStartedContent />;
+const AboutUSPage = () => {
+  return <AboutUsPageContent />;
 };
 
-export default GetStartedPage;
+export default AboutUSPage;

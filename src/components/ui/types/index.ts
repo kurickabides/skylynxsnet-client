@@ -71,3 +71,11 @@ export interface MenuItemProps extends RouteItem {
 }
 //for fun remove if never use
 export type Pokemon = { name: string; url: string };
+
+//Forms
+interface ViewEditLayoutProps {
+  mode: "view" | "edit";
+  onToggle: () => void;
+  viewComponent: React.ReactNode;
+  editComponent: React.ReactNode;
+}

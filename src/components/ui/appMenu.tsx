@@ -4,7 +4,7 @@
 // Description: Renders the left nav menu including nested submenus
 // ================================================
 
-import React, { FC, ReactElement, useState } from "react";
+import React, { FC, ReactElement, useState, useEffect } from "react";
 import clsx from "clsx";
 import {
   List,
@@ -19,9 +19,9 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import DefaultIcon from "@mui/icons-material/AccountBox";
 import { useLocation } from "react-router-dom";
-
+import { AppMenuProps } from "./types";
 import MenuItem from "./menuItem";
-import { routeConfig } from "../../config/routeConfig";
+import { routeConfig } from "../../config/routeUserConfig";
 import {
   SectionDivider,
   IndentedList,
@@ -31,13 +31,22 @@ import RouteItem from "../../config/RouteItem";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import { RootState } from "../../appStore/store";
 
-const Menu: FC = (): ReactElement => {
+const Menu: FC<AppMenuProps> = ({ open }): ReactElement => {
   const [openStates, setOpenStates] = useState<Record<string, boolean>>({});
   const location = useLocation();
 
   // ⬇️ Get the global drawer open state
-  const menuOpen = true //useAppSelector((state) => state.auth.isLoggedIn);
-
+  let menuOpen = false 
+  useEffect(() => {
+    if (!open) {
+      setOpenStates({});
+      menuOpen = false
+    }
+    else{
+      menuOpen = true
+    }
+  }, [open]);
+ 
   // Pull auth state for route filtering
   const auth = useAppSelector((state) => state.auth);
   const state: Partial<RootState> = { auth };
@@ -73,7 +82,7 @@ const Menu: FC = (): ReactElement => {
                     <Icon component={route.icon || DefaultIcon} />
                   </MenuSelected>
                 </ListItemIcon>
-                {menuOpen && <ListItemText primary={route.title} />}
+                {open && <ListItemText primary={route.title} />}
                 <Tooltip
                   title={openStates[route.key] ? "Collapse" : "Expand"}
                   placement="right"
@@ -94,13 +103,13 @@ const Menu: FC = (): ReactElement => {
                         : sRoute.enabled !== false
                     )
                     .map((sRoute: RouteItem) => (
-                      <MenuItem open={menuOpen} {...sRoute} />
+                      <MenuItem open={open} {...sRoute} />
                     ))}
                 </IndentedList>
               </Collapse>
             </>
           ) : (
-            <MenuItem open={menuOpen} {...route} />
+            <MenuItem open={open} {...route} />
           )}
           {route.appendDivider && <SectionDivider />}
         </React.Fragment>
