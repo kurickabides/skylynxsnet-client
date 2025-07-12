@@ -8,7 +8,9 @@ import {
   AuthTokenState,
   SkylynxNet_LoggedINUser,
   SkylynxNet_UserProfile,
+  UserProfileResp,
 } from "./types";
+
 import * as authApi from "./authAPI";
 import { saveAuthState, loadAuthState } from "../../helpers/persistAuth";
 
@@ -54,7 +56,6 @@ const userLoggedIN: SkylynxNet_LoggedINUser = {
   profile: emptyProfile,
 };
 
-// Fallback default
 const fallbackState: AuthTokenState = {
   token: "",
   isLoggedIn: false,
@@ -65,20 +66,41 @@ const fallbackState: AuthTokenState = {
   error: "",
 };
 
-// Initial state from encrypted localStorage or fallback
 const initialState: AuthTokenState = loadAuthState() || fallbackState;
 
+// 🔐 Combined login + profile thunk
+export const loginAndLoadProfile = createAsyncThunk<
+  { token: string; roles: string[]; profile: SkylynxNet_UserProfile },
+  SkylynxNet_AuthLoginReq,
+  { state: RootState }
+>("auth/loginAndLoadProfile", async (credentials, thunkAPI) => {
+  try {
+    const loginResponse = await authApi.signInWithPassword(credentials);
+    const token = loginResponse.token;
+
+    if (!token) throw new Error("Login failed — no token");
+
+    const profileResp = await authApi.fetchUserProfile(token);
+
+    return {
+      token,
+      roles: loginResponse.roles || [],
+      profile: profileResp.profile,
+    };
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue("Failed to login and load profile");
+  }
+});
+
+// 🧾 Optional legacy login
 export const login = createAsyncThunk<
   SkylynxNet_AuthLoginResponse,
   SkylynxNet_AuthLoginReq,
   { state: RootState }
 >("auth/login", async (credentials, thunkAPI) => {
   try {
-    const response = await authApi.signInWithPassword(credentials);
-    console.log("✅ Login API response:", response);
-    return response;
-  } catch (error) {
-    console.error("❌ Login error:", error);
+    return await authApi.signInWithPassword(credentials);
+  } catch {
     return thunkAPI.rejectWithValue("Login failed");
   }
 });
@@ -89,10 +111,21 @@ export const signup = createAsyncThunk<
   { state: RootState }
 >("auth/signup", async (credentials, thunkAPI) => {
   try {
-    const response = await authApi.signUp(credentials);
-    return response;
-  } catch (error) {
+    return await authApi.signUp(credentials);
+  } catch {
     return thunkAPI.rejectWithValue("Signup failed");
+  }
+});
+
+export const fetchUserProfile = createAsyncThunk<
+  UserProfileResp,
+  string,
+  { state: RootState }
+>("auth/fetchUserProfile", async (token, thunkAPI) => {
+  try {
+    return await authApi.fetchUserProfile(token);
+  } catch {
+    return thunkAPI.rejectWithValue("Failed to fetch user profile.");
   }
 });
 
@@ -111,6 +144,32 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(loginAndLoadProfile.pending, (state) => {
+        state.isAuthLoading = true;
+      })
+      .addCase(loginAndLoadProfile.fulfilled, (state, action) => {
+        const { token, roles, profile } = action.payload;
+
+        state.token = token;
+        state.isLoggedIn = true;
+        state.isAuthLoading = false;
+        state.error = "";
+        state.user = {
+          id: profile.UserID,
+          roles: roles || [],
+          profile,
+        };
+        state.remainingTime = 60 * 60 * 1000;
+
+        saveAuthState(state);
+      })
+      .addCase(loginAndLoadProfile.rejected, (state, action) => {
+        state.isAuthLoading = false;
+        state.isLoggedIn = false;
+        state.error = (action.payload as string) || "Login + Profile failed";
+      })
+
+      // Legacy login and signup fallbacks
       .addCase(login.pending, (state) => {
         state.isAuthLoading = true;
       })
@@ -122,28 +181,13 @@ const authSlice = createSlice({
           state.token = token;
           state.isLoggedIn = true;
           state.error = "";
-
-          console.log(
-            "✅ login.fulfilled called — setting isLoggedIn ",
-            state.isLoggedIn
-          );
-
           state.user = {
             id: "",
             roles: roles || [],
             profile: emptyProfile,
           };
-
-          // Simulated session duration: 1 hour
           state.remainingTime = 60 * 60 * 1000;
-
-          // Save encrypted state
           saveAuthState(state);
-
-          console.log(
-            "✅ login.fulfilled isLoggedIn after user update is",
-            state.isLoggedIn
-          );
         } else {
           state.error = "Login did not return a token";
         }
@@ -163,6 +207,11 @@ const authSlice = createSlice({
         state.isAuthLoading = false;
         state.isLoggedIn = false;
         state.error = (action.payload as string) || "Signup failed";
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.user.id = action.payload.profile.userId;
+        state.user.profile = action.payload.profile;
+        saveAuthState(state);
       });
   },
 });

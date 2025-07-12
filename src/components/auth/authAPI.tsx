@@ -3,9 +3,14 @@ import {
   SkylynxNet_AuthLoginResponse,
   SkylynxNet_AuthSignUpReq,
   SkylynxNet_AuthSignUpResponse,
+  UserProfileResp,
 } from "./types";
 
-import { SkylynxKey_APIKEY, AuthServer_URL } from "../../helpers/constants";
+import {
+  SkylynxKey_APIKEY,
+  AuthServer_URL,
+  SkylynxServer_URL,
+} from "../../helpers/constants";
 
 // 🔐 Login
 export const signInWithPassword = async ({
@@ -51,4 +56,28 @@ export const signUp = async ({
   }
 
   return response.json();
+};
+
+// ================================================
+// ✅ Thunk: loadUserProfile
+// Description: Fetches extended user profile and stores it in state
+// ================================================
+
+export const fetchUserProfile = async (
+  token: string
+): Promise<UserProfileResp> => {
+  const res = await fetch(`${SkylynxServer_URL}/users/profile`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "skyx-api-key": SkylynxKey_APIKEY,
+    },
+  });
+
+  if (!res.ok) {
+    const msg = await res.text();
+    throw new Error(msg || "Failed to load user profile.");
+  }
+
+  return res.json();
 };

@@ -15,6 +15,10 @@ export interface SkylynxNet_AuthSignUpReq {
   profileFields?: UserProfileField[]; // ✅ Optional and supported by server
 }
 
+export interface UserProfileResp {
+  profile: SkylynxNet_UserProfile;
+}
+
 export interface SkylynxNet_AuthSignUpResponse {
   message: string;
   userId: string;
@@ -72,7 +76,7 @@ export type ProfileFields = ProfileField[];
 
 // Detailed User Profile
 export interface SkylynxNet_UserProfile {
-  userId: string;
+  UserID: string;
   username: string;
   email: string;
   emailConfirmed: boolean;

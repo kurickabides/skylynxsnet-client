@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { CardHeader, Button } from "@mui/material";
 import Loading from "../ui/LoadingProgessBar";
-import { login, signup } from "./authSlice";
+import { loginAndLoadProfile, signup } from "./authSlice";
 import Toasted from "../ui/toast";
 
 // Styles
@@ -42,16 +42,21 @@ const AuthForm: FC<AuthFormProps> = (): React.ReactElement => {
   useEffect(() => {
     console.log("🔁 the auth state in appform is", auth);
 
-    if (auth.isLoggedIn && !auth.isAuthLoading) {
-      navigate("/dashboard");
-      setToast({
-        open: true,
-        message: "Authentication successful",
-        status: "success",
-      });
-    } else if (!auth.isLoggedIn && auth.error) {
-      setToast({ open: true, message: auth.error, status: "error" });
-    }
+     if (auth.isLoggedIn && !auth.isAuthLoading) {
+       // ✅ Log full LoggedInUser state
+       console.log("🔐 Logged in user:", auth.user);
+       console.log("🧾 User profile object:", auth.user.profile);
+
+       navigate("/dashboard");
+       setToast({
+         open: true,
+         message: "Authentication successful",
+         status: "success",
+       });
+     } else if (!auth.isLoggedIn && auth.error) {
+       setToast({ open: true, message: auth.error, status: "error" });
+     }
+     
   }, [auth, navigate]);
 
   const logInSubmitHandler = async (event: FormEvent) => {
@@ -62,7 +67,7 @@ const AuthForm: FC<AuthFormProps> = (): React.ReactElement => {
     if (email && password) {
       const payload = { email, secret: password };
       if (isLogin) {
-        dispatch(login(payload));
+        dispatch(loginAndLoadProfile(payload));
       } else {
         dispatch(signup(payload));
       }

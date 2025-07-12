@@ -58,6 +58,7 @@ function App() {
 
   useEffect(() => {
     if (authState.isLoggedIn) {
+      authState.user.id
       createTimer(authState.remainingTime);
     }
     if (!authState.isLoggedIn && logoutTimer.current !== null) {

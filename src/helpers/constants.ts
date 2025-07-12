@@ -37,3 +37,5 @@ export const StellarAnchorClient_SKEY = "";
 export const SkylynxKey_APIKEY = "2EEBE1A1-23CD-4C16-96E7-567C02EF79EA";
 export const AuthServer_URL = `http://localhost:5001/api/auth/`;
 export const app_URL = `https://skylynxnet:5001/`;
+//API Setting
+export const SkylynxServer_URL = "http://localhost:5001/api";
