@@ -6,6 +6,7 @@ import { FlexRowBetween } from "../theme/appStyles";
 import PageTitle from "../components/ui/pageTitle";
 import { APP_TITLE, PAGE_TITLE_DASHBOARD } from "../helpers/constants";
 import GalleryListView from "../modules/galleryListView/galleryListView ";
+import { GalleryModuleSettings } from "../modules/galleryListView/types";
 import { fetchUserPortals } from "../modules/galleryListView/galleryListApi";
 import {
   setGalleryItems,
@@ -16,6 +17,13 @@ const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
   const authState = useAppSelector(selectAuth);
   const galleryItems = useAppSelector(selectGalleryItems);
+
+   const portalGallerySettings: GalleryModuleSettings = {
+     title: "My Portals",
+     showTitle: true,
+     showDescription: true,
+     layoutVariant: "grid",
+   };
 
   useEffect(() => {
     const loadPortals = async () => {
@@ -50,17 +58,11 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>
-          {PAGE_TITLE_DASHBOARD} | {APP_TITLE}
-        </title>
-      </Helmet>
-
-      <FlexRowBetween>
-        <PageTitle title={PAGE_TITLE_DASHBOARD} />
-      </FlexRowBetween>
-
-      <GalleryListView items={galleryItems} onItemClick={handlePortalClick} />
+      <GalleryListView
+        settings={portalGallerySettings}
+        items={galleryItems}
+        onItemClick={handlePortalClick}
+      />
     </>
   );
 };

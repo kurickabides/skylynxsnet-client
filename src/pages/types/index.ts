@@ -4,4 +4,4 @@ export interface UserProfileFormProps {
   fields: UserProfileField[];
   onSave: (fields: UserProfileField[]) => void;
   onChange: (fields: UserProfileField[]) => void;
-}
+

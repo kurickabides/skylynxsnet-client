@@ -7,8 +7,8 @@
 // Filename: /modules/galleryListView/GalleryListView.tsx
 // ================================================
 
-import React from "react";
-import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
+import React, {useState} from "react";
+import { useAppSelector, useAppDispatch,  } from "../../hooks/reduxHooks";
 import { selectGalleryItems, setGalleryItems } from "./galleryListSlice";
 import { GalleryListViewProps } from "./types";
 import {
@@ -19,15 +19,15 @@ import {
   GalleryLabel,
   GalleryDescription,
 } from "./styled";
+import ModuleWrapper from "../../components/ui/moduleWrapper";
 
 const GalleryListView: React.FC<GalleryListViewProps> = ({
   items,
   onItemClick,
-  layoutVariant = "grid",
-  showDescription = true,
+  settings,
 }) => {
   const dispatch = useAppDispatch();
-
+  const [currentSettings, setCurrentSettings] = useState(settings);
   React.useEffect(() => {
     dispatch(setGalleryItems(items));
   }, [items]);
@@ -35,26 +35,31 @@ const GalleryListView: React.FC<GalleryListViewProps> = ({
   const galleryItems = useAppSelector(selectGalleryItems);
 
   return (
-    <GalleryContainer>
-      {galleryItems.map((item) => (
-        <GalleryCard
-          key={item.id}
-          onClick={() => onItemClick(item.id)}
-          title={`${item.description || ""}`}
-        >
-          <GalleryLabel>{item.label}</GalleryLabel>
-          <GalleryImage
-            src={`backgrounds/${item.splashImage}`}
-            alt={item.label}
-          />
-          <GalleryCardContent>
-            {showDescription && item.description && (
-              <GalleryDescription>{item.description}</GalleryDescription>
-            )}
-          </GalleryCardContent>
-        </GalleryCard>
-      ))}
-    </GalleryContainer>
+    <ModuleWrapper
+      settings={currentSettings}
+      onSettingsUpdate={(updated) => setCurrentSettings(updated)}
+    >
+      <GalleryContainer>
+        {galleryItems.map((item) => (
+          <GalleryCard
+            key={item.id}
+            onClick={() => onItemClick(item.id)}
+            title={`${item.description || ""}`}
+          >
+            <GalleryLabel>{item.label}</GalleryLabel>
+            <GalleryImage
+              src={`backgrounds/${item.splashImage}`}
+              alt={item.label}
+            />
+            <GalleryCardContent>
+              {currentSettings.showDescription && item.description && (
+                <GalleryDescription>{item.description}</GalleryDescription>
+              )}
+            </GalleryCardContent>
+          </GalleryCard>
+        ))}
+      </GalleryContainer>
+    </ModuleWrapper>
   );
 };
 
