@@ -1,6 +1,6 @@
 //**Partical */
 //**This class creates particals */
-import {P5Instance} from "../../ui/reactP5WrapperComponent";
+import {P5Instance} from "../../ui/gamming/reactP5WrapperComponent";
 import { Vector } from "p5";
 import * as tModels from "./fireworksModels";
 

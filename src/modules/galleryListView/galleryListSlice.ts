@@ -9,12 +9,9 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../appStore/store";
-import { GalleryItem } from "./types";
-
-interface GalleryState {
-  items: GalleryItem[];
-}
-
+import { GalleryItem, GalleryState } from "./types";
+import { moduleRegistry } from "../../appStore/moduleStateRegistry";
+import { selectModuleState } from "../../appStore/moduleStateSelector";
 const initialState: GalleryState = {
   items: [],
 };
@@ -32,8 +29,14 @@ const galleryListSlice = createSlice({
   },
 });
 
+// ✅ Step 3: Register reducer on load
+moduleRegistry.register("gallerylist", galleryListSlice.reducer);
+
 export const { setGalleryItems, clearGalleryItems } = galleryListSlice.actions;
 
-export const selectGalleryItems = (state: RootState) => state.gallerylist.items;
+export const selectGalleryItems = (state: RootState): GalleryItem[] => {
+  const gallery = selectModuleState<GalleryState>(state, "gallerylist");
+  return gallery?.items ?? [];
+};
 
 export default galleryListSlice.reducer;

@@ -5,7 +5,7 @@
 
 import React, { FC, ReactElement } from "react";
 import { Helmet } from "react-helmet";
-import PageTitle  from "../../components/ui/pageTitle"; // Shared PageTitle component
+import PageTitle  from "../../components/ui/gamming/pageTitle"; // Shared PageTitle component
 import BankAccountCard from "../../components/userAccounts/BankAccountCard"; // Component for bank accounts
 
 // Constants

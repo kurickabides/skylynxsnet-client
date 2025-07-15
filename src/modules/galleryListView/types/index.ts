@@ -19,12 +19,13 @@ export interface PortalGalleryItem extends GalleryItem {
 }
 export interface GalleryModuleSettings extends SkylynxModuleSettings {
   showDescription?: boolean;
-  layoutVariant?: "grid" | "list";
+  layoutVariant?: "grid" | "table" | "list";
 }
-
 export interface GalleryListViewProps {
   items: GalleryItem[]; // List of cards to display
+  itemsPerPage?: number;
   onItemClick: (id: string) => void; // Called when an image or card is clicked
   settings: GalleryModuleSettings;
 }
 
+export type GalleryState = { items: GalleryItem[] };

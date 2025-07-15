@@ -8,7 +8,7 @@ import React, { FC, ReactElement } from "react";
 import { Helmet } from "react-helmet";
 import UserProfileDetails from "../components/user/UserProfileDetails"; // User profile details component
 import PasswordResetForm from "../components/settings/settingProfile"; // Password reset form component
-import PageTitle from "../components/ui/pageTitle";  // Page title component
+import PageTitle from "../components/ui/gamming/pageTitle";  // Page title component
 import { FormRoot } from "../theme/appStyles"; // Shared form styles
 
 // Constants

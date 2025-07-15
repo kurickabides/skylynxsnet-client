@@ -9,9 +9,9 @@ import React, { useRef, useEffect, FC, useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { CardHeader, Button } from "@mui/material";
-import Loading from "../ui/LoadingProgessBar";
+import Loading from "../ui/loading/LoadingProgessBar";
 import { loginAndLoadProfile, signup } from "./authSlice";
-import Toasted from "../ui/toast";
+import Toasted from "../ui/dialogs/toast";
 
 // Styles
 import { AuthCard, AuthCardContent, AuthLabel } from "./styled/authForm";

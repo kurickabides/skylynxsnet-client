@@ -1,4 +1,4 @@
-import {P5Instance} from "../../ui/reactP5WrapperComponent";
+import {P5Instance} from "../../ui/gamming/reactP5WrapperComponent";
 import { Vector } from "p5";
 //fwm stans for fireworks module
 import {ParticleClass} from "./particle";

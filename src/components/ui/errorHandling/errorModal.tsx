@@ -6,7 +6,7 @@
 
 import React from "react";
 import Button from "@mui/material/Button";
-import { Backdrop, ErrorPopup, ErrorActions } from "./styled/errorModal";
+import { Backdrop, ErrorPopup, ErrorActions } from "../styled/errorModal";
 
 interface ErrorModalProps {
   onClose: React.MouseEventHandler<HTMLButtonElement>;

@@ -1,6 +1,6 @@
 //This is our Tree sketch
 import { Element, Vector } from "p5";
-import {P5Instance} from "../../ui/reactP5WrapperComponent";
+import {P5Instance} from "../../ui/gamming/reactP5WrapperComponent";
 import {tree} from "./branch";
 import {FireWorkClass} from "../fireworks/firework";
 import {ParticleClass} from "../fireworks/particle";

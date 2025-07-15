@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import { styled } from "@mui/material/styles";
-import { FooterRoot } from "../../theme/appStyles";
-import { FOOTER_TEXT } from "../../helpers/constants";
+import { FooterRoot } from "../../../theme/appStyles";
+import { FOOTER_TEXT } from "../../../helpers/constants";
 import { Link } from "@mui/material";
 
 const Root = FooterRoot;

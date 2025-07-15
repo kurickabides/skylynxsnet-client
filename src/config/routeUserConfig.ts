@@ -7,7 +7,7 @@ import Dashboard from "../pages/dashboard";
 import Home from "../pages/home";
 import Settings from "../pages/settings";
 import WalletPage from "../pages/accounts/walletsAccounts";
-import RouteItem from "./RouteItem";
+import { RouteItem } from "./types";
 
 export const routeConfig: RouteItem[] = [
   {
@@ -27,15 +27,6 @@ export const routeConfig: RouteItem[] = [
     icon: DashboardIcon,
     component: Dashboard,
     condition: (state) => state.auth?.isLoggedIn ?? false,
-  },
-  {
-    key: "router-wallet",
-    title: "Wallet",
-    path: "/wallet",
-    tooltip: "Your Wallet",
-    icon: WalletIcon,
-    component: WalletPage,
-    condition: (state) => state.userBankAccounts?.isLoaded ?? false,
   },
   {
     key: "router-settings",

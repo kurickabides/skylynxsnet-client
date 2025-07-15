@@ -1,3 +1,12 @@
+// ================================================
+// ✅ Component: App
+// Description: Main App Entry with Portal Bootstrap Wrapper
+// Author: NimbusCore.OpenAI
+// Architect: Chad Martin
+// Company: CryoRio
+// Filename: App.tsx
+// ================================================
+
 import React, { FC, ReactElement, useReducer, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "./hooks/reduxHooks";
@@ -10,20 +19,21 @@ import {
 import { Helmet } from "react-helmet";
 import { selectUI } from "./components/ui/uiSlice";
 import { authActions, selectAuth } from "./components/auth/authSlice";
-import Toast from "./components/ui/toast";
-import ShellLayout from "./components/ui/shellLayout";
+import Toast from "./components/ui/dialogs/toast";
+import ShellLayout from "./components/ui/layouts/shellLayout";
 import { Loadroutes } from "./config/loadroutes";
 import { createDarkTheme, createLightTheme } from "./theme/appTheme";
 import { Web3ReactProvider } from "@web3-react/core";
-import RouteItem from "./config/RouteItem";
+import { RouteItem } from "./config/types";
 import { ToastItem } from "./components/ui/types";
 import { APP_TITLE } from "./helpers/constants";
 import { ethers } from "ethers";
-import AuthPage from "./pages/authPage"
-import  AuthLayout  from "./components/layouts/authLayout";
+import AuthPage from "./pages/authPage";
+import AuthLayout from "./components/layouts/authLayout";
+import AppBootstrap from "./appBootstrap"; // ✅ Wrap app entry
+
 const AppContext = React.createContext(null);
 
-// Web3 setup
 function getLibrary(provider: any): ethers.providers.Web3Provider {
   const library = new ethers.providers.Web3Provider(provider);
   library.detectNetwork();
@@ -40,7 +50,6 @@ function App() {
   const uiState = useAppSelector(selectUI);
   const authState = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
-
   const logoutTimer = useRef<NodeJS.Timeout | null>(null);
 
   const theme: Theme = responsiveFontSizes(
@@ -58,7 +67,6 @@ function App() {
 
   useEffect(() => {
     if (authState.isLoggedIn) {
-      authState.user.id
       createTimer(authState.remainingTime);
     }
     if (!authState.isLoggedIn && logoutTimer.current !== null) {
@@ -74,73 +82,73 @@ function App() {
   return (
     <AppContext.Provider value={null}>
       <Web3ReactProvider getLibrary={getLibrary}>
-        <BrowserRouter>
-          <Helmet>
-            <title>{APP_TITLE}</title>
-          </Helmet>
-          <ThemeProvider theme={theme}>
-            {uiState.notification?.status !== "idle" && (
-              <Toast toastMessage={toastMessageState} />
-            )}
+        <AppBootstrap>
+          <BrowserRouter>
+            <Helmet>
+              <title>{APP_TITLE}</title>
+            </Helmet>
+            <ThemeProvider theme={theme}>
+              {uiState.notification?.status !== "idle" && (
+                <Toast toastMessage={toastMessageState} />
+              )}
 
-            <Routes>
-              {/* ✅ Login route WITHOUT layout */}
-              <Route
-                path="/auth"
-                element={
-                  <AuthLayout>
-                    <AuthPage />
-                  </AuthLayout>
-                }
-              />
+              <Routes>
+                <Route
+                  path="/auth"
+                  element={
+                    <AuthLayout>
+                      <AuthPage />
+                    </AuthLayout>
+                  }
+                />
 
-              {/* ✅ All other routes wrapped in layout */}
-              <Route
-                path="*"
-                element={
-                  <ShellLayout
-                    toggleTheme={toggle}
-                    useDefaultTheme={useDefaultTheme}
-                  >
-                    <Routes>
-                      {routes.map((route: RouteItem) =>
-                        route.subRoutes ? (
-                          route.subRoutes.map((item: RouteItem) =>
-                            item.path ? (
-                              <Route
-                                key={item.key as string}
-                                path={item.path}
-                                element={
-                                  item.component ? (
-                                    <item.component />
-                                  ) : (
-                                    <DefaultComponent />
-                                  )
-                                }
-                              />
-                            ) : null
-                          )
-                        ) : route.path ? (
-                          <Route
-                            key={route.key as string}
-                            path={route.path}
-                            element={
-                              route.component ? (
-                                <route.component />
-                              ) : (
-                                <DefaultComponent />
-                              )
-                            }
-                          />
-                        ) : null
-                      )}
-                    </Routes>
-                  </ShellLayout>
-                }
-              />
-            </Routes>
-          </ThemeProvider>
-        </BrowserRouter>
+                <Route
+                  path="*"
+                  element={
+                    <ShellLayout
+                      toggleTheme={toggle}
+                      useDefaultTheme={useDefaultTheme}
+                    >
+                      <Routes>
+                        {routes.map((route: RouteItem) =>
+                          route.subRoutes ? (
+                            route.subRoutes.map((item: RouteItem) =>
+                              item.path ? (
+                                <Route
+                                  key={item.key as string}
+                                  path={item.path}
+                                  element={
+                                    item.component ? (
+                                      <item.component />
+                                    ) : (
+                                      <DefaultComponent />
+                                    )
+                                  }
+                                />
+                              ) : null
+                            )
+                          ) : route.path ? (
+                            <Route
+                              key={route.key as string}
+                              path={route.path}
+                              element={
+                                route.component ? (
+                                  <route.component />
+                                ) : (
+                                  <DefaultComponent />
+                                )
+                              }
+                            />
+                          ) : null
+                        )}
+                      </Routes>
+                    </ShellLayout>
+                  }
+                />
+              </Routes>
+            </ThemeProvider>
+          </BrowserRouter>
+        </AppBootstrap>
       </Web3ReactProvider>
     </AppContext.Provider>
   );

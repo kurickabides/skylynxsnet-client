@@ -6,7 +6,7 @@
 
 import React, { FC, ReactElement } from "react";
 import { Helmet } from "react-helmet";
-import PageTitle from "../ui/pageTitle";
+import PageTitle from "../ui/gamming/pageTitle";
 import { FormRoot, FlexRowBetween } from "../../theme/appStyles";
 import UserProfileDetails from "./UserProfileDetails";
 import EditUserProfileFields from "./EditUserProfileFields";

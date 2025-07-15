@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { CircularProgress } from "@mui/material";
-import { FlexCenterFull } from "./styled/loading";
+import { FlexCenterFull } from "../styled/loading";
 
 
 const Loading: FC = () => {

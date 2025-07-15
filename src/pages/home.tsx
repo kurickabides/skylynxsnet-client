@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import { Helmet } from "react-helmet";
 import HomeContent from "../components/home/homeContent";
-import PageTitle from "../components/ui/pageTitle";
+import PageTitle from "../components/ui/gamming/pageTitle";
 import { APP_TITLE, PAGE_TITLE_HOME } from "../helpers/constants";
 import { FlexRowBetween } from "../theme/appStyles";
 

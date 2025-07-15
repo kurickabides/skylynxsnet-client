@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import {Counter} from "../components/counter/counter"
 // components
-import PageTitle from "../components/ui/pageTitle";
+import PageTitle from "../components/ui/gamming/pageTitle";
 
 // constants
 import { APP_TITLE, PAGE_TITLE_DASHBOARD } from '../helpers/constants';

@@ -18,6 +18,8 @@
     Select,
     RadioGroup,
     TextareaAutosize,
+    ListItemButton,
+    Pagination,
   } from "@mui/material";
   import { mixin } from "lodash-es";
   import { MobileDatePicker } from "@mui/x-date-pickers";
@@ -242,7 +244,6 @@
   }));
 
 
-
   export const MenuSelected = styled(IconButton)(({ theme }) => ({
     transition: "box-shadow",
     transitionDuration: "1s",
@@ -254,6 +255,20 @@
 
   export const IndentedItem = styled(ListItem)(({ theme }) => ({
     marginLeft: theme.spacing(layoutMixins.theme.spacing),
+  }));
+
+  export const ListItemCard = styled(Card)(({ theme }) => ({
+    padding: theme.spacing(2),
+    cursor: "pointer",
+    transition: "box-shadow 0.3s ease",
+    "&:hover": {
+      boxShadow: theme.shadows[4],
+    },
+  }));
+
+  export const StyledPagination = styled(Pagination)(({ theme }) => ({
+    marginTop: theme.spacing(2),
+    alignSelf: "center",
   }));
 
   export const SectionTitle = styled("h2")(({ theme }) => ({
@@ -340,21 +355,29 @@
     marginLeft: theme.spacing(layoutMixins.theme.spacing),
   }));
 
-  export const StyledListItem = styled(ListItem)(({ theme }) => ({
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    borderRadius: theme.shape.borderRadius,
-    marginBottom: theme.spacing(0.5),
-    "&.Mui-selected": {
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.primary.contrastText,
-    },
-    "&:hover": {
-      backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.common.white,
-      transition: "background-color 0.3s ease",
-    },
-  }));
+export const StyledListItem = styled(ListItem)(({ theme }) => ({
+  paddingLeft: 0,
+  paddingRight: 0,
+  borderRadius: theme.shape.borderRadius,
+  marginBottom: theme.spacing(0.5),
+}));
+
+// ✅ Button area (clickable)
+export const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(2),
+  borderRadius: theme.shape.borderRadius,
+  "&.Mui-selected": {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.contrastText,
+  },
+  "&:hover": {
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.common.white,
+    transition: "background-color 0.3s ease",
+  },
+}));
+
 
   export const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
     minWidth: 36,

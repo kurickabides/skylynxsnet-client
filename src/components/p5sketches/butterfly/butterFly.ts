@@ -1,5 +1,5 @@
 //This is our Tree sketch
-import {P5Instance} from "../../ui/reactP5WrapperComponent"
+import {P5Instance} from "../../ui/gamming/reactP5WrapperComponent"
 
 
 var yoff = 0;

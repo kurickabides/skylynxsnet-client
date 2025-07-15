@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
 
 // Components
-import Header from "../ui/header";
-import Navigation from "../ui/navigation";
-import Footer from "../ui/footer";
+import Header from "../ui/pageparts/header";
+import Navigation from "../ui/menus/navigation";
+import Footer from "../ui/pageparts/footer";
 
 // Redux
 import { useAppDispatch } from "../../hooks/reduxHooks";

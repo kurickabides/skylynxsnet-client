@@ -3,8 +3,8 @@ import { IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 import AppMenu from "./appMenu";
-import { NavigationProps } from "./types";
-import { DrawerToolbar, StyledDrawer } from "./styled/navigation";
+import { NavigationProps } from "../types";
+import { DrawerToolbar, StyledDrawer } from "../styled/navigation";
 
 const Navigation: FC<NavigationProps> = ({
   open,

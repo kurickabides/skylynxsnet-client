@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { PageTitleText } from "../../theme/appStyles";
+import { PageTitleText } from "../../../theme/appStyles";
 
 const PageTitle: FC<{ title: string }> = ({ title }): ReactElement => {
   return (

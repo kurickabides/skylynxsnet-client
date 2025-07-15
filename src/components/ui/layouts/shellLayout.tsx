@@ -7,19 +7,19 @@
 import React, { FC, ReactNode, useReducer } from "react";
 import { CssBaseline } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Header from "./header";
-import Navigation from "./navigation";
-import Footer from "./footer";
-import { authActions } from "../auth/authSlice";
-import { useAppDispatch } from "../../hooks/reduxHooks";
+import Header from "../pageparts/header";
+import Navigation from "../menus/navigation";
+import Footer from "../pageparts/footer";
+import { authActions } from "../../auth/authSlice";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
 import {
   LayoutRoot,
   LayoutContent,
   LayoutContentShift,
   LayoutToolbarOffset,
   FooterContainer,
-} from "./styled/layout";
-import { LayoutProps } from "./types";
+} from "../styled/layout";
+import { LayoutProps } from "../types";
 
 const ShellLayout: FC<LayoutProps> = ({
   toggleTheme,

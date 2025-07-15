@@ -5,12 +5,12 @@
 // ================================================
 
 import React, { FC } from "react";
-import { ToastItem } from "./types";
+import { ToastItem } from "../types";
 import {
   ToastSection,
   ToastErrorText,
   ToastSuccessText,
-} from "./styled/toastStyles";
+} from "../styled/toastStyles";
 
 const Toasted: FC<{ toastMessage: ToastItem }> = ({ toastMessage }) => {
   const { status, message } = toastMessage;

@@ -12,8 +12,8 @@ import React, {
   useEffect,
 } from "react";
 import { createCanvas, P5Instance } from "./reactP5WrapperComponent";
-import { SketchLive } from "../p5sketches/trees/sketchLive";
-import { SketchRoot } from "./styled/p5Sketch";
+import { SketchLive } from "../../p5sketches/trees/sketchLive";
+import { SketchRoot } from "../styled/p5Sketch";
 
 const P5Sketch: FC<{}> = memo((): ReactElement => {
   const [isFirstLoaded, setFirstLoad] = useState<boolean>(true);

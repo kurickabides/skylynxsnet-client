@@ -7,7 +7,7 @@
 import React, { FC, ReactElement } from "react";
 import { Helmet } from "react-helmet";
 //import ETHWalletCard from "../../components/userAccounts/ethWalletCard"; // ETH wallet card component
-import PageTitle from "../../components/ui/pageTitle";  // Shared page title component
+import PageTitle from "../../components/ui/gamming/pageTitle";  // Shared page title component
 
 // Constants
 import { APP_TITLE, SUBPAGE_TITLE_ETH } from "../../helpers/constants";

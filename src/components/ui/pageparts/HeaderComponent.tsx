@@ -6,7 +6,7 @@
 
 import React, { FC } from "react";
 import { styled } from "@mui/material/styles";
-import { HeaderComponentProps } from "./types";
+import { HeaderComponentProps } from "../types";
 
 
 const HeaderWrapper = styled("div")<HeaderComponentProps>(

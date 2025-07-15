@@ -1,64 +1,66 @@
 // ================================================
 // ✅ Component: GalleryListView
-// Description: Reusable image gallery component with label/description click support
+// Description: Reusable image gallery component with layout toggle (grid/list)
 // Author: NimbusCore.OpenAI
 // Architect: Chad Martin
 // Company: CryoRio
 // Filename: /modules/galleryListView/GalleryListView.tsx
 // ================================================
 
-import React, {useState} from "react";
-import { useAppSelector, useAppDispatch,  } from "../../hooks/reduxHooks";
-import { selectGalleryItems, setGalleryItems } from "./galleryListSlice";
-import { GalleryListViewProps } from "./types";
-import {
-  GalleryContainer,
-  GalleryCard,
-  GalleryCardContent,
-  GalleryImage,
-  GalleryLabel,
-  GalleryDescription,
-} from "./styled";
-import ModuleWrapper from "../../components/ui/moduleWrapper";
+import React, { useState } from "react";
+import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
+import { selectModuleState } from "../../appStore/moduleStateSelector";
+import { setGalleryItems } from "./galleryListSlice";
+import { GalleryListViewProps, GalleryState } from "./types";
+import ModuleWrapper from "../../components/ui/module/moduleWrapper";
+import ImageGridView from "../../components/ui/lists/ImageGridView";
+import ItemListView from "../../components/ui/lists/ItemListView";
+import ItemTableView from "../../components/ui/lists/ItemTableView";
+;
 
 const GalleryListView: React.FC<GalleryListViewProps> = ({
   items,
+  itemsPerPage =6,
   onItemClick,
   settings,
 }) => {
   const dispatch = useAppDispatch();
-  const [currentSettings, setCurrentSettings] = useState(settings);
+  const [currentSettings, setCurrentSettings] =
+    useState<typeof settings>(settings);
+
   React.useEffect(() => {
     dispatch(setGalleryItems(items));
   }, [items]);
 
-  const galleryItems = useAppSelector(selectGalleryItems);
+  const galleryItems = useAppSelector(
+    (state) =>
+      selectModuleState<GalleryState>(state, "gallerylist")?.items ?? []
+  );
 
   return (
     <ModuleWrapper
       settings={currentSettings}
       onSettingsUpdate={(updated) => setCurrentSettings(updated)}
     >
-      <GalleryContainer>
-        {galleryItems.map((item) => (
-          <GalleryCard
-            key={item.id}
-            onClick={() => onItemClick(item.id)}
-            title={`${item.description || ""}`}
-          >
-            <GalleryLabel>{item.label}</GalleryLabel>
-            <GalleryImage
-              src={`backgrounds/${item.splashImage}`}
-              alt={item.label}
-            />
-            <GalleryCardContent>
-              {currentSettings.showDescription && item.description && (
-                <GalleryDescription>{item.description}</GalleryDescription>
-              )}
-            </GalleryCardContent>
-          </GalleryCard>
-        ))}
-      </GalleryContainer>
+      {currentSettings.layoutVariant === "table" ? (
+        <ItemTableView
+          items={galleryItems}
+          onItemClick={onItemClick}
+          settings={currentSettings}
+        />
+      ) : currentSettings.layoutVariant === "list" ? (
+         <ItemListView
+            items={galleryItems}
+              onItemClick={onItemClick}
+              settings={currentSettings}
+           />
+          )   : (
+        <ImageGridView
+          items={galleryItems}
+          onItemClick={onItemClick}
+          settings={currentSettings}
+        />
+      )}
     </ModuleWrapper>
   );
 };

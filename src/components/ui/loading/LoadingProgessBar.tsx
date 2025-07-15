@@ -7,7 +7,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import LinearProgress from "@mui/material/LinearProgress";
-import { CenteredProgressBar } from "./styled/loading";
+import { CenteredProgressBar } from "../styled/loading";
 
 // 🔒 Local styling only
 

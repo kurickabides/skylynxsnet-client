@@ -15,7 +15,7 @@ import * as authApi from "./authAPI";
 import { saveAuthState, loadAuthState } from "../../helpers/persistAuth";
 
 const emptyProfile: SkylynxNet_UserProfile = {
-  userId: "",
+  UserID: "",
   username: "",
   email: "",
   emailConfirmed: false,
@@ -209,7 +209,7 @@ const authSlice = createSlice({
         state.error = (action.payload as string) || "Signup failed";
       })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
-        state.user.id = action.payload.profile.userId;
+        state.user.id = action.payload.profile.UserID;
         state.user.profile = action.payload.profile;
         saveAuthState(state);
       });

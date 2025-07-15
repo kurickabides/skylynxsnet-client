@@ -1,11 +1,10 @@
 // ================================================
-// ✅ Component: Header
-// File: components/layout/Header.tsx
-// Description: AppBar for default (non-metamask) auth layouts
+// ✅ Component: HeaderMinimal
+// File: components/layout/HeaderMinimal.tsx
+// Description: Compact AppBar for lightweight layouts (e.g., wallet only)
 // ================================================
 
 import React, { FC, ReactElement } from "react";
-import clsx from "clsx";
 import {
   CssBaseline,
   Typography,
@@ -16,35 +15,39 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness3Icon from "@mui/icons-material/Brightness3";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import UserIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/LockOutlined";
 import LogoutIN from "@mui/icons-material/LockOpenOutlined";
-import { useNavigate } from "react-router-dom";
 
+import { APP_TITLE } from "../../../helpers/constants";
+import { useAppSelector } from "../../../hooks/reduxHooks";
+import { selectAuth } from "../../auth/authSlice";
+//import { selectStellar } from "../stellar/xlmSlice";
+import { HeaderMinimalProps } from "../types";
 import {
   HeaderAppBar,
   HeaderAppBarShift,
   FlexRowBetween,
   HeaderTitle,
   MenuButton,
-} from "../../theme/appStyles";
-import { APP_TITLE } from "../../helpers/constants";
-import { useAppSelector } from "../../hooks/reduxHooks";
-import { selectAuth } from "../auth/authSlice";
-import { HeaderProps } from "./types";
+  IconWrapper,
+  IconImageFull,
+} from "../../../theme/appStyles";
 
-const Header: FC<HeaderProps> = ({
+
+
+const HeaderMinimal: FC<HeaderMinimalProps> = ({
   open,
   handleMenuOpen,
-  handleSignUp,
-  handleSignIn,
+  handleMetaMaskConnect,
   handleDisconnect,
   toggleTheme,
   useDefaultTheme,
 }): ReactElement => {
-  const navigate = useNavigate();
   const authState = useAppSelector(selectAuth);
+  const xlmState = useAppSelector(selectStellar);
   const isLoggedIn = authState.isLoggedIn;
+  const isVaildAccount = xlmState.isVaildAccount;
 
   const ThemeToggleIcon = useDefaultTheme ? (
     <Brightness3Icon />
@@ -57,17 +60,17 @@ const Header: FC<HeaderProps> = ({
       <CssBaseline />
       {open ? (
         <HeaderAppBarShift position="fixed" elevation={0}>
-          <ToolbarContent />
+          <ToolbarMinimal />
         </HeaderAppBarShift>
       ) : (
         <HeaderAppBar position="fixed" elevation={0}>
-          <ToolbarContent />
+          <ToolbarMinimal />
         </HeaderAppBar>
       )}
     </>
   );
 
-  function ToolbarContent() {
+  function ToolbarMinimal() {
     return (
       <FlexRowBetween>
         <HeaderTitle>
@@ -76,7 +79,7 @@ const Header: FC<HeaderProps> = ({
             aria-label="open menu"
             onClick={handleMenuOpen}
             edge="start"
-            sx={{ display: open ? "none" : "inline-flex" }}
+            sx={{ marginRight: "36px", display: open ? "none" : "inline-flex" }}
           >
             <MenuIcon />
           </MenuButton>
@@ -97,32 +100,31 @@ const Header: FC<HeaderProps> = ({
         </IconButton>
 
         {!isLoggedIn && (
-          <IconButton size="small" onClick={handleSignIn} color="inherit">
-            <LogoutIN />
+          <IconButton
+            size="small"
+            onClick={handleMetaMaskConnect}
+            color="inherit"
+          >
+            <IconWrapper>
+              <IconImageFull src="/logos/metamask-logo-vector.svg" />
+            </IconWrapper>
+          </IconButton>
+        )}
+
+        {(isVaildAccount || isLoggedIn) && (
+          <IconButton size="small" onClick={handleDisconnect} color="inherit">
+            <LogoutIcon />
           </IconButton>
         )}
 
         {isLoggedIn && (
-          <>
-            <IconButton size="small" onClick={handleDisconnect} color="inherit">
-              <LogoutIcon />
-            </IconButton>
-            <IconButton size="small" color="inherit">
-              {authState.user.profile.photo ? (
-                <img
-                  src={authState.user.profile.photo}
-                  alt="User"
-                  style={{ width: 32, height: 32, borderRadius: "50%" }}
-                />
-              ) : (
-                <AccountCircle />
-              )}
-            </IconButton>
-          </>
+          <IconButton size="small" color="inherit">
+            <UserIcon />
+          </IconButton>
         )}
       </FlexRowBetween>
     );
   }
 };
 
-export default Header;
+export default HeaderMinimal;

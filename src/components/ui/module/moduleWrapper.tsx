@@ -14,8 +14,8 @@ import {
   ModuleContainer,
   ModuleHeader,
   ModuleInnerContent,
-} from "./styled/moduleWrapper";
-import { ModuleWrapperProps } from "./types/moduleWrapper";
+} from "../styled/moduleWrapper";
+import { ModuleWrapperProps } from "../types/moduleWrapper";
 import { ImportExportOutlined } from "@mui/icons-material";
 
 const ModuleWrapper: FC<ModuleWrapperProps> = ({

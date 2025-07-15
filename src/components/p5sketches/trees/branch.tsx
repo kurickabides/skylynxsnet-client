@@ -2,8 +2,8 @@
 //** Branch Class  */
 //** This method will be the class for building branches */
 import { Vector } from "p5";
-import P5Sketch from "../../ui/p5Sketch";
-import {P5Instance} from "../../ui/reactP5WrapperComponent";
+import P5Sketch from "../../ui/gamming/p5Sketch";
+import {P5Instance} from "../../ui/gamming/reactP5WrapperComponent";
 import * as tModels from "./treeModels";
 
 export module tree{

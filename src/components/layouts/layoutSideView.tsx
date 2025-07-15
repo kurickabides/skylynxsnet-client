@@ -10,9 +10,9 @@ import { CssBaseline } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import HeaderComponent from "../ui/HeaderComponent";
-import Navigation from "../ui/navigation";
-import Footer from "../ui/footer";
+import HeaderComponent from "../ui/pageparts/HeaderComponent";
+import Navigation from "../ui/menus/navigation";
+import Footer from "../ui/pageparts/footer";
 
 // Redux
 import { authActions } from "../auth/authSlice";

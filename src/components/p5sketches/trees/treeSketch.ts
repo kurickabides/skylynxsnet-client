@@ -1,6 +1,6 @@
 //This is our Tree sketch
 import { Element } from "p5";
-import {P5Instance} from "../../ui/reactP5WrapperComponent"
+import {P5Instance} from "../../ui/gamming/reactP5WrapperComponent"
 
 
 
