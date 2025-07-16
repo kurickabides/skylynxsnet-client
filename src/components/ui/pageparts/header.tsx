@@ -1,22 +1,14 @@
-// ================================================
-// ✅ Component: Header
-// File: components/layout/Header.tsx
-// Description: AppBar for default (non-metamask) auth layouts
-// ================================================
-
-import React, { FC, ReactElement } from "react";
-import clsx from "clsx";
+import React, { FC, ReactElement, useEffect, useState } from "react";
 import {
   CssBaseline,
   Typography,
   Tooltip,
   IconButton,
-  Icon,
+  Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness3Icon from "@mui/icons-material/Brightness3";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/LockOutlined";
 import LogoutIN from "@mui/icons-material/LockOpenOutlined";
 import { useNavigate } from "react-router-dom";
@@ -51,6 +43,34 @@ const Header: FC<HeaderProps> = ({
   ) : (
     <Brightness7Icon />
   );
+
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isLoggedIn && authState.user.profile.photo) {
+      let userImagePath = `/portals/${authState.user.profile.portalName}/users/${authState.user.profile.photo}/`;
+      const fullPath = userImagePath;
+      console.log(
+        `📛 HeaderAuthState User.isLoggedIn:${isLoggedIn} User Object ${fullPath} `
+      );
+      // TEMP: hardcoded test path override
+      userImagePath = `backgrounds/${authState.user.profile.photo} `;
+
+      console.log("📸 Full Avatar Path:", fullPath);
+      console.log("🧪 Test Avatar Path:", userImagePath);
+
+      setAvatarUrl(userImagePath);
+    } else {
+      console.log(
+        `📛 HeaderAuthState User.isLoggedIn:${isLoggedIn} User Object ${authState.user.id} `
+      );
+          console.log("👤 Full AuthState:", JSON.stringify(authState, null, 2));
+      let userImagePath2 = "/backgrounds/chadxtrasm.png";
+      setAvatarUrl(userImagePath2);
+      console.log("📛 Avatar not set: no photo or not logged in");
+      //setAvatarUrl(null);
+    }
+  }, [authState.user.profile]); // <- use full object instead
 
   return (
     <>
@@ -108,15 +128,13 @@ const Header: FC<HeaderProps> = ({
               <LogoutIcon />
             </IconButton>
             <IconButton size="small" color="inherit">
-              {authState.user.profile.photo ? (
-                <img
-                  src={authState.user.profile.photo}
-                  alt="User"
-                  style={{ width: 32, height: 32, borderRadius: "50%" }}
-                />
-              ) : (
-                <AccountCircle />
-              )}
+              <Avatar
+                src={avatarUrl || undefined}
+                sx={{ width: 32, height: 32 }}
+              >
+                {authState.user.profile.firstName?.[0]}
+                {authState.user.profile.lastName?.[0]}
+              </Avatar>
             </IconButton>
           </>
         )}

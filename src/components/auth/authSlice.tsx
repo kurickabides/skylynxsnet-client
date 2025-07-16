@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../appStore/store";
+  import { normalizeKeys } from "../../services/utils/formatText";
 import {
   SkylynxNet_AuthLoginReq,
   SkylynxNet_AuthLoginResponse,
@@ -12,7 +13,7 @@ import {
 } from "./types";
 
 import * as authApi from "./authAPI";
-import { saveAuthState, loadAuthState } from "../../helpers/persistAuth";
+
 
 const emptyProfile: SkylynxNet_UserProfile = {
   UserID: "",
@@ -66,7 +67,7 @@ const fallbackState: AuthTokenState = {
   error: "",
 };
 
-const initialState: AuthTokenState = loadAuthState() || fallbackState;
+const initialState: AuthTokenState =  fallbackState;
 
 // 🔐 Combined login + profile thunk
 export const loginAndLoadProfile = createAsyncThunk<
@@ -139,8 +140,7 @@ const authSlice = createSlice({
       state.user = userLoggedIN;
       state.isAuthLoading = false;
       state.error = "";
-      localStorage.removeItem("auth");
-    },
+        },
   },
   extraReducers: (builder) => {
     builder
@@ -149,19 +149,20 @@ const authSlice = createSlice({
       })
       .addCase(loginAndLoadProfile.fulfilled, (state, action) => {
         const { token, roles, profile } = action.payload;
-
+        //we need to do this is match our interfaces
+        const normalizedProfile = normalizeKeys<SkylynxNet_UserProfile>(profile);
         state.token = token;
         state.isLoggedIn = true;
         state.isAuthLoading = false;
         state.error = "";
         state.user = {
-          id: profile.UserID,
+          id: normalizedProfile.UserID,
           roles: roles || [],
-          profile,
+          profile: normalizedProfile,
         };
         state.remainingTime = 60 * 60 * 1000;
 
-        saveAuthState(state);
+      
       })
       .addCase(loginAndLoadProfile.rejected, (state, action) => {
         state.isAuthLoading = false;
@@ -173,7 +174,7 @@ const authSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.isAuthLoading = true;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(login.fulfilled, (state, action) => {  
         const { token, roles } = action.payload;
         state.isAuthLoading = false;
 
@@ -187,7 +188,7 @@ const authSlice = createSlice({
             profile: emptyProfile,
           };
           state.remainingTime = 60 * 60 * 1000;
-          saveAuthState(state);
+          
         } else {
           state.error = "Login did not return a token";
         }
@@ -211,7 +212,11 @@ const authSlice = createSlice({
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         state.user.id = action.payload.profile.UserID;
         state.user.profile = action.payload.profile;
-        saveAuthState(state);
+        state.remainingTime = 60 * 60 * 1000;
+         console.log(
+           `📛 fetchUserProfile-AuthState User.isLoggedIn:${state.isLoggedIn} User Object ${state.user.profile} `
+         );
+        
       });
   },
 });

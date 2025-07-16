@@ -9,6 +9,7 @@
 
 import { GalleryItem } from "./types";
 import { SkylynxKey_APIKEY, SkylynxServer_URL } from "../../helpers/constants";
+
 export const fetchUserPortals = async ({
   userID,
   token,
@@ -20,17 +21,18 @@ export const fetchUserPortals = async ({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // ✅ Include token
+      Authorization: `Bearer ${token}`, // ✅ Fixed template string
       "skyx-api-key": SkylynxKey_APIKEY,
     },
-
-    body: JSON.stringify({ userID }),
+    body: JSON.stringify({ userID }), // ✅ Sends correct body
   });
-
+  console.log("UserID Key:", userID);
+   console.log("API Key:", SkylynxKey_APIKEY);
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error?.error || "Failed to fetch user portals");
   }
 
-  return res.json().then((data) => data.portals);
+  const data = await res.json();
+  return data.portals;
 };

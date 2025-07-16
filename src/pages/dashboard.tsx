@@ -30,8 +30,11 @@ const Dashboard: React.FC = () => {
       if (!authState?.token) return;
 
       try {
+        console.log("authState.user:", authState.user.profile.userID);
+        console.log("Resolved userID:", authState.user?.id);
+        let userId: string = authState.user.profile.userID;
         const portals = await fetchUserPortals({
-          userID:authState.user.id,
+          userID: userId,
           token: authState.token,
         });
 
@@ -50,7 +53,7 @@ const Dashboard: React.FC = () => {
     };
 
     loadPortals();
-  }, [authState.user?.id, authState.token]);
+  }, [authState.user, authState.token]);
 
   const handlePortalClick = (portalId: string) => {
     console.log("📦 Clicked Portal:", portalId);

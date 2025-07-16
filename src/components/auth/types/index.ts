@@ -75,8 +75,17 @@ export type UserProfileField = {
 export type ProfileFields = ProfileField[];
 
 // Detailed User Profile
+// ================================================
+// ✅ Entity: SkylynxNet_UserProfile
+// Description: Canonical user profile model returned by SkylynxNet API
+// Author: NimbusCore.OpenAI
+// Architect: Chad Martin
+// Company: CryoRio
+// Filename:entities/user/skylynxUserProfile.ts
+// ================================================
+
 export interface SkylynxNet_UserProfile {
-  UserID: string;
+  userID: string;
   username: string;
   email: string;
   emailConfirmed: boolean;
@@ -84,32 +93,39 @@ export interface SkylynxNet_UserProfile {
   phoneNumberConfirmed: boolean;
   twoFactorEnabled: boolean;
   accessFailedCount: number;
+
   portalId: string;
   portalName: string;
   portalDescription?: string;
   portalCreatedDate: string;
+
   providerId: string;
+
   firstName?: string;
   lastName?: string;
   photo?: string;
   mobilePhone?: string;
   dateOfBirth?: string;
   preferredLanguage?: string;
+
   addressId?: string;
   mailingAddress1?: string;
   mailingAddress2?: string;
   city?: string;
   stateProvinceId?: string;
   zip?: string;
+
   billingAddressId?: string;
   billingAddress1?: string;
   billingAddress2?: string;
   billingCity?: string;
   billingZip?: string;
   billingStateProvinceId?: string;
+
   createdAt: string;
   updatedAt: string;
 }
+
 
 export interface SkylynxNet_PasswordResetResponse {
   email: string;

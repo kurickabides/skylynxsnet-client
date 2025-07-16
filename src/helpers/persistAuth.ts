@@ -1,5 +1,6 @@
 import { encryptData, decryptData } from "./doEncrypt";
 import { AuthTokenState } from "../components/auth/types";
+import { normalizeKeys } from "../services/utils/formatText"; // ✅ used for camelCase normalization
 
 export const saveAuthState = (auth: AuthTokenState) => {
   const now = Date.now();
@@ -22,10 +23,16 @@ export const loadAuthState = (): AuthTokenState | null => {
 
     if (decrypted._expiresAt && decrypted._expiresAt > now) {
       const { _savedAt, _expiresAt, ...validAuth } = decrypted;
+
+      // ✅ Normalize the profile keys before returning
+      if (validAuth?.user?.profile) {
+        validAuth.user.profile = normalizeKeys(validAuth.user.profile);
+      }
+
       return validAuth as AuthTokenState;
     }
 
-    // Expired: cleanup
+    // ❌ Expired token — remove from storage
     localStorage.removeItem("auth");
     return null;
   } catch (err) {

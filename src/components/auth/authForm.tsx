@@ -12,7 +12,7 @@ import { CardHeader, Button } from "@mui/material";
 import Loading from "../ui/loading/LoadingProgessBar";
 import { loginAndLoadProfile, signup } from "./authSlice";
 import Toasted from "../ui/dialogs/toast";
-
+import { saveAuthState } from "../../helpers/persistAuth";
 // Styles
 import { AuthCard, AuthCardContent, AuthLabel } from "./styled/authForm";
 import {
@@ -39,6 +39,13 @@ const AuthForm: FC<AuthFormProps> = (): React.ReactElement => {
     status: "info" as "success" | "error" | "info",
   });
 
+//Remove Login when user removes
+  useEffect(() => {
+    if (!auth.isLoggedIn) {
+      localStorage.removeItem("auth");
+    }
+  }, [auth.isLoggedIn]);
+
   useEffect(() => {
     console.log("🔁 the auth state in appform is", auth);
 
@@ -46,7 +53,8 @@ const AuthForm: FC<AuthFormProps> = (): React.ReactElement => {
        // ✅ Log full LoggedInUser state
        console.log("🔐 Logged in user:", auth.user);
        console.log("🧾 User profile object:", auth.user.profile);
-
+       console.log("👤 Full AuthState:", JSON.stringify(auth, null, 2));
+       saveAuthState(auth);
        navigate("/dashboard");
        setToast({
          open: true,
