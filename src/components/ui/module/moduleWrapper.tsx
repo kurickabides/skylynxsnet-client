@@ -1,66 +1,25 @@
 // ================================================
 // ✅ Component: ModuleWrapper
-// File: components/ui/ModuleWrapper.tsx
-// Description: Reusable module container with collapsible header and settings icon
+// Description: Wrapper component used in metadata render tree for Modules
+// Author: NimbusCore.OpenAI
+// Architect: Chad Martin
+// Company: CryoRio
+// Filename: components/ui/module/moduleWrapper.tsx
 // ================================================
 
-import React, { FC, useState, ReactNode } from "react";
-import { IconButton, Typography } from "@mui/material";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ModuleSettingsDialog  from "./ModuleSettingsDialog";
-import {
-  ModuleContainer,
-  ModuleHeader,
-  ModuleInnerContent,
-} from "../styled/moduleWrapper";
-import { ModuleWrapperProps } from "../types/moduleWrapper";
-import { ImportExportOutlined } from "@mui/icons-material";
+import React, { FC } from "react";
+import { ModuleWrapperProps } from "../types/uiWrappers";
+import { ModuleShell } from "../../../theme/appStyles";
 
 const ModuleWrapper: FC<ModuleWrapperProps> = ({
-  settings,
+  renderNode,
+  debugId,
   children,
-  onSettingsUpdate,
 }) => {
-  const [expanded, setExpanded] = useState(true);
-  const { title, showTitle = true } = settings;
-  const [openSettings, setOpenSettings] = useState(false);
-
   return (
-    <ModuleContainer>
-      {showTitle && (
-        <ModuleHeader>
-          <Typography variant="h6">{title}</Typography>
-          <div>
-            <IconButton
-              color="inherit"
-              onClick={() => setExpanded(!expanded)}
-              size="small"
-            >
-              {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </IconButton>
-            <IconButton
-              color="inherit"
-              onClick={() => setOpenSettings(true)}
-              size="small"
-            >
-              <SettingsIcon />
-            </IconButton>
-            <ModuleSettingsDialog
-              open={openSettings}
-              settings={settings}
-              onClose={() => setOpenSettings(false)}
-              onSave={(updatedSettings) => {
-                onSettingsUpdate?.(updatedSettings); // <-- Pass to parent
-                setOpenSettings(false);
-              }}
-            />
-          </div>
-        </ModuleHeader>
-      )}
-      {expanded && <ModuleInnerContent>{children}</ModuleInnerContent>}
-    </ModuleContainer>
+    <ModuleShell className={renderNode.viewModel.contextKey} data-debug-id={debugId}>
+      {children}
+    </ModuleShell>
   );
 };
 

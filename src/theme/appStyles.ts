@@ -24,6 +24,62 @@
   import { mixin } from "lodash-es";
   import { MobileDatePicker } from "@mui/x-date-pickers";
 
+  //Core template Content Wrappers for targets
+  export const PortalShell = styled("div")(({ theme }) => ({
+    width: "100%",
+    minHeight: "100vh",
+    backgroundColor: theme.palette.background.default,
+    display: "flex",
+    flexDirection: "column",
+  }));
+  //again style might need to change
+export const DyFormShell = styled("div")(({ theme }) => ({
+  padding: theme.spacing(3),
+  margin: theme.spacing(2, 0),
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[1],
+}));
+  // ================================================
+// ✅ Style: LayoutShell
+// Description: Layout wrapper with regional columns
+// ================================================
+export const LayoutShell = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "nowrap",
+  width: "100%",
+  minHeight: "100vh",
+  backgroundColor: theme.palette.background.default,
+  gap: theme.spacing(2),
+  padding: theme.spacing(2),
+  overflowX: "hidden",
+  overflowY: "auto",
+}));
+
+export const ModuleShell = styled("div")(({ theme }) => ({
+  padding: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[1],
+  transition: theme.transitions.create(["box-shadow", "transform"], {
+    duration: theme.transitions.duration.short,
+  }),
+  "&:hover": {
+    boxShadow: theme.shadows[4],
+    transform: "translateY(-1px)",
+  },
+}));
+
+//used in age wrappers
+export const PageShell = styled("div")(({ theme }) => ({
+  padding: theme.spacing(3),
+  backgroundColor: theme.palette.background.default,
+  minHeight: "100vh",
+}));
+
   // ✅ Reusable row layout with space-between alignment
   export const FlexRowBetween = styled("div")(({ theme }) => ({
     flex: 1,
@@ -36,7 +92,7 @@
     alignItems: "center",
     justifyContent: "center",
   }));
-
+ 
   export const PaperContainer = styled(Container)(({ theme }) => ({
     padding: theme.spacing(layoutMixins.theme.spacing),
     display: "flex",

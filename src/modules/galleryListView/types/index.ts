@@ -3,7 +3,8 @@
 // File: modules/galleryListView/types/index.ts
 // Description: Type definitions for generic image-based gallery module
 // ================================================
-import { SkylynxModuleSettings } from "../../../components/ui/types/moduleWrapper";
+import { SkylynxModuleSettings } from "../../../components/ui/types/uiWrappers";
+import React, { ReactNode } from "react";
 
 export interface GalleryItem {
   id: string; // Unique ID for selection
@@ -21,11 +22,12 @@ export interface GalleryModuleSettings extends SkylynxModuleSettings {
   showDescription?: boolean;
   layoutVariant?: "grid" | "table" | "list";
 }
-export interface GalleryListViewProps {
+export interface GalleryListViewProps  {
   items: GalleryItem[]; // List of cards to display
   itemsPerPage?: number;
   onItemClick: (id: string) => void; // Called when an image or card is clicked
   settings: GalleryModuleSettings;
+  children?: ReactNode;
 }
 
 export type GalleryState = { items: GalleryItem[] };

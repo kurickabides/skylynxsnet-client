@@ -28,7 +28,7 @@ import {
 import {
   SkylynxModuleSettings,
   ModuleSettingsDialogProps,
-} from "../types/moduleWrapper/index";
+} from "../types/uiWrappers/index";
 
 const enumFields: Record<string, string[]> = {
   layoutVariant: ["grid", "list", "table"],

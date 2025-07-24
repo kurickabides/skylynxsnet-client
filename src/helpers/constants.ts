@@ -39,3 +39,4 @@ export const AuthServer_URL = `http://localhost:5001/api/auth/`;
 export const app_URL = `https://skylynxnet:5001/`;
 //API Setting
 export const SkylynxServer_URL = "http://localhost:5001/api";
+export const SkylynxServer_TemplatesURL = "http://localhost:5001/api/nimbus/templates/targets/";

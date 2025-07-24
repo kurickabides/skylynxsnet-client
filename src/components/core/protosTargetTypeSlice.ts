@@ -16,7 +16,7 @@ const initialState: ProtosTargetTypeState = {
 };
 
 export const loadProtosTargetTypes = createAsyncThunk<TemplateType[]>(
-  "protosTargetType/load",
+  "/api/nimbus/templates/types",
   async (_, thunkAPI) => {
     try {
       return await fetchProtosTargetTypes(); // 🔁 no token needed

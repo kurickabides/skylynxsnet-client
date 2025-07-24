@@ -9,11 +9,11 @@
 
 import React from "react";
 import { useAppSelector } from "../../hooks/reduxHooks";
-import ModuleWrapper from "../../components/ui/module/moduleWrapper";
+import ModuleWrapper from "../../components/ui/module/moduleFrame";
 import DyFormRenderer from "../../components/dyForm/dyFormRenderer";
 import { TreeUtils } from "../../services/utils/treeUtils";
 import { resolveFormContextFromDataModel } from "../../services/utils/formResolverUtils";
-import { SkylynxModuleSettings } from "../../components/ui/types/moduleWrapper";
+import { SkylynxModuleSettings } from "../../components/ui/types/uiWrappers";
 
 const UserProfileModule: React.FC = () => {
   const portalTree = useAppSelector((state) => state.skylynxPortalTree.tree);

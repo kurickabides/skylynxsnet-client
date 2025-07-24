@@ -8,13 +8,32 @@
 // Company: CryoRio
 // Filename: types/skylynx/core/types.ts
 // ================================================
-
+import React, { ReactNode } from "react";
+import { IPortal } from "../../../entities/portal";
 
 export interface SkylynxPortalTreeState {
   tree?: SkylynxPortalTree;
   loading: boolean;
   error?: string;
 }
+
+// Define shape of a registry entry
+export interface ITargetRegistryEntry {
+  data?: Record<string, any>;
+}
+
+export enum RegistryStatus {
+  Loading = "loading",
+  Ok = "ok",
+  Error = "error",
+}
+export interface TargetRegistryState {
+  targets: Record<string, ITargetRegistryEntry>;
+  lastResolvedAt: string;
+  status: RegistryStatus;
+}
+
+
 
 export interface ProtosTargetTypeState {
   types: TemplateType[];
@@ -30,13 +49,21 @@ export interface IKeyValuePair {
   key: string;
   value: string;
 }
+
+
+// Protos Template Interfaces
 export interface IResolver {
   resolverId: string;
   resolverType: string; // from ResolverType table
   target: string;
   description?: string;
 }
-
+export interface DyFormResolver extends IResolver {
+  context: string;
+  path?: string;
+  method?: string;
+  notes?: string;
+}
 export interface SkylynxDataModel {
   createdAt?: Date;
   updatedAt?: Date;
@@ -112,6 +139,7 @@ export interface vmProviderProfileFieldModel extends SkylynxDataModel {
 export interface SkylynxPortalTree {
   PortalName: string;
   PortalTemplate: ProtosTemplate;
+  PortalObject?: IPortal;
   children?: SkylynxTemplateNode[];
 }
 
@@ -140,12 +168,13 @@ export type TemplateRelationship = {
 export interface SkylynxTemplateNode {
   nodeName: string;
   template: ProtosTemplate;
+  targetObject: ITargetComponent;
   children?: SkylynxTemplateNode[];
 }
 
 export interface TemplateType {
   targetTypeID: string;
-  TargetTypeName?: string;
+  TargetTypeName: string;
   description?: string;
   createdAt?: Date;
 }
@@ -171,6 +200,18 @@ export interface DyFormSections {
   sortOrder: number;
   fields?: DyFormField[];
   children?: DyFormSections[];
+}
+
+export interface ISkylynxViewModel {
+  portalName: string;
+  moduleName?: string;
+  templateVersion: string;
+  resolver?: IResolver | DyFormResolver;
+  contextKey?: string; // optional tag
+}
+//this has the Component information along with targt reocrds data they can be loaded into component if need like title and other info need to hydrate website
+export interface ITargetComponent {
+  data?: Record<string, SkylynxDataModel>; //targets record
 }
 
 export interface DyFormViewModel {
@@ -232,13 +273,29 @@ export interface DyFormDomain {
   options: IKeyValuePair[];
 }
 
-export interface DyFormResolver {
-  context: string;
-  type: string;
-  target: string;
-  path?: string;
-  method?: string;
-  notes?: string;
-}
 
+
+
+//Base Wrapper Interfaces
+
+export interface SkylynxBaseWrapperProps {
+  renderNode: SkylynxRenderNode;
+  children?: ReactNode;
+  className?: string;
+  style?: React.ElementType;
+  debugId?: string;
+  visible?: boolean;
+  themeContext?: any; // Will be used by ThemeFactory
+}
+export interface SkylynxRenderNode<
+  VM = ISkylynxViewModel,
+  DM = SkylynxDataModel,
+  TC = ITargetComponent
+> {
+  template: ProtosTemplate;
+  viewModel: VM;
+  dataModel: DM;
+  targetComponent?: TC;
+  children?: SkylynxRenderNode<any, any, any>[];
+}
 

@@ -12,7 +12,7 @@ import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { selectModuleState } from "../../appStore/moduleStateSelector";
 import { setGalleryItems } from "./galleryListSlice";
 import { GalleryListViewProps, GalleryState } from "./types";
-import ModuleWrapper from "../../components/ui/module/moduleWrapper";
+import ModuleFrame from "../../components/ui/module/moduleFrame";
 import ImageGridView from "../../components/ui/lists/ImageGridView";
 import ItemListView from "../../components/ui/lists/ItemListView";
 import ItemTableView from "../../components/ui/lists/ItemTableView";
@@ -20,9 +20,10 @@ import ItemTableView from "../../components/ui/lists/ItemTableView";
 
 const GalleryListView: React.FC<GalleryListViewProps> = ({
   items,
-  itemsPerPage =6,
+  itemsPerPage = 6,
   onItemClick,
   settings,
+  children,
 }) => {
   const dispatch = useAppDispatch();
   const [currentSettings, setCurrentSettings] =
@@ -38,7 +39,7 @@ const GalleryListView: React.FC<GalleryListViewProps> = ({
   );
 
   return (
-    <ModuleWrapper
+    <ModuleFrame
       settings={currentSettings}
       onSettingsUpdate={(updated) => setCurrentSettings(updated)}
     >
@@ -49,19 +50,19 @@ const GalleryListView: React.FC<GalleryListViewProps> = ({
           settings={currentSettings}
         />
       ) : currentSettings.layoutVariant === "list" ? (
-         <ItemListView
-            items={galleryItems}
-              onItemClick={onItemClick}
-              settings={currentSettings}
-           />
-          )   : (
+        <ItemListView
+          items={galleryItems}
+          onItemClick={onItemClick}
+          settings={currentSettings}
+        />
+      ) : (
         <ImageGridView
           items={galleryItems}
           onItemClick={onItemClick}
           settings={currentSettings}
         />
       )}
-    </ModuleWrapper>
+    </ModuleFrame>
   );
 };
 

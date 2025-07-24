@@ -1,5 +1,6 @@
 # Skylynx Network
 > Client Website for Skylynx Network.
+> The website will
 > This client app will also have a mobile version.
 
 ## ✅ What is the Skylynx Network
@@ -43,29 +44,6 @@ Each module will:
 ### 🔧 Settings Dialog
 All modules support a `SkylynxModuleSettings` config interface (title, showTitle, layoutVariant, etc.). These are editable via a dynamic dialog using `ModuleSettingsDialog`.
 
----
-
-## ✅ Registry Pattern Overview
-Skylynx uses the Registry Pattern to manage dynamic content injection at runtime. This enables modular extensibility and avoids static imports.
-
-### 📦 ModuleRegistry
-| Purpose         | Description |
-|-----------------|-------------|
-| Dynamic Modules | Register modules like `GalleryListView`, `UserProfileManager`, etc. |
-| Usage           | Used inside `ModuleFactory` to resolve component by `moduleName` |
-| Extension       | Allows per-portal overrides via custom registrations |
-
-### 🔀 RouteRegistry
-| Purpose         | Description |
-|-----------------|-------------|
-| Dynamic Routing | Injects `<Route>` entries during portal build traversal |
-| Usage           | Pages register themselves with `RouteRegistry.register()` |
-| Advantage       | Enables lazy-loaded, metadata-driven routing without global route files |
-
-Example registration:
-```ts
-RouteRegistry.register("/settings/profile", <PageWrapper>{...}</PageWrapper>);
-```
 ---
 
 ## ✅ Portal Builder Design
@@ -125,39 +103,27 @@ The Skylynx Client uses a modular factory system to render portals dynamically b
 | Injects | Styled container wrappers (PortalShell, LayoutShell, ModuleShell) |
 | Enables | Dynamic theming, white labeling, and UX separation by tenant |
 
-### 🧭 Runtime Factory Diagram
-```mermaid
-flowchart TD
-  A[PortalFactory] --> B[PageFactory]
-  B --> C[LayoutFactory]
-  C --> D1[Main Region]
-  C --> D2[Sidebar Region]
-
-  D1 --> E1[ModuleFactory] --> F1[UserProfileManager]
-  F1 --> G1[ViewModelContentBuilderFactory]
-  G1 --> H1[DyFormFactory]
-  H1 --> I1[DynamicFormRenderer]
-  I1 --> J1[FieldRenderer]
-
-  D2 --> E2[ModuleFactory] --> F2[GalleryListView]
-```
-
 ---
 
-## ✅ Smart UI Containers
-Each major node type in the tree has a matching smart UI container:
+## ✅ Registry Pattern Overview
 
-| Container         | Description |
-|------------------|-------------|
-| `PortalWrapper`   | Theme-aware shell around entire portal rendering |
-| `PageWrapper`     | Handles route-bound page metadata, title, etc. |
-| `LayoutWrapper`   | Wraps layout regions (main/sidebar/footer), handles spacing |
-| `ModuleWrapper`   | Adds settings dialog, collapsible title, and runtime module control |
+Skylynx uses registries to dynamically resolve modules and routes at runtime.
 
-These containers:
-- Take in `settings` and `children`
-- Wrap children with behavioral or presentational logic
-- Support per-tenant styles via `ThemeFactory`
+### 📚 ModuleRegistry
+- Stores key → component mappings for all dynamic modules.
+- Loaded at startup or lazy-registered via API.
+- Used in `ModuleFactory`:
+```ts
+const Component = ModuleRegistry.get("UserProfileManager");
+```
+
+### 🧭 RouteRegistry
+- Maintains dynamic route → element mappings.
+- Populated by `TreeFactory` when processing PageNodes:
+```ts
+RouteRegistry.register("/dashboard", <PageWrapper>{...}</PageWrapper>);
+```
+- Used at app root to inject all dynamic routes into `<Routes>` component.
 
 ---
 
@@ -186,6 +152,23 @@ return (
 
 ---
 
+## ✅ Smart UI Containers
+Each major node type in the tree has a matching smart UI container:
+
+| Container         | Description |
+|------------------|-------------|
+| `PortalWrapper`   | Theme-aware shell around entire portal rendering |
+| `PageWrapper`     | Handles route-bound page metadata, title, etc. |
+| `LayoutWrapper`   | Wraps layout regions (main/sidebar/footer), handles spacing |
+| `ModuleWrapper`   | Adds settings dialog, collapsible title, and runtime module control |
+
+These containers:
+- Take in `settings` and `children`
+- Wrap children with behavioral or presentational logic
+- Support per-tenant styles via `ThemeFactory`
+
+---
+
 ## ✅ Portal Runtime Configuration Models
 
 | Model                 | Description                                                     |
@@ -198,53 +181,9 @@ return (
 
 ---
 
-## ✅ Example Flow: GalleryListView on Dashboard
+## ✅ Factory Execution Flow: Route & Module Registry Integration
 
-1. Portal config includes `GalleryListView` in `main` region.
-2. PageFactory builds layout → inserts ModuleFactory calls into each region.
-3. ModuleFactory loads `GalleryListView` via registry.
-4. Wrapped with `ModuleWrapper`, passing props from `PortalPageModuleMap`.
-5. Component renders.
-6. Admin clicks settings → `ModuleSettingsDialog` shown.
-7. Settings saved and module re-renders.
-
----
-
-## ✅ What’s Next
-- Scaffold top-level factories: `PortalFactory`, `PageFactory`, `ModuleFactory`
-- Implement `ViewModelContentBuilderFactory` → integrate DyForm modules
-- Build shared `DyFormFactory`, `FieldRenderer`, `useDynamicFormState`
-- Add Theme-aware shells: `PortalWrapper`, `LayoutWrapper`, `PageWrapper`
-- Enable RouteWrapper usage during TreeFactory traversal
-- Clarify Registry roles across node types (modules, routes, etc.)
-
----
-
-## ✅ Summary
-The Skylynx Client enables **portal-specific customization**, **metadata-driven rendering**, and **runtime modularity**. By combining factory-based composition with template metadata, we achieve:
-
-- High extensibility
-- Configurable layout + UX per tenant
-- Route-aware tree rendering
-- Thematic styling via `ThemeFactory`
-- Reuse across platforms (desktop/web/mobile)`
-
-
-``` mermaid 
-flowchart TD
-  A[TreeFactory Entry Node]
-  A --> B1[PortalWrapper]
-  B1 --> C1[PageWrapper]
-  C1 --> D1[LayoutWrapper]
-  D1 --> E1[ModuleWrapper: UserProfile]
-  D1 --> E2[ModuleWrapper: Gallery]
-
-  click A "Represents SkylynxRenderNode<Portal>" _blank
-  click C1 "Each node receives children via Tree traversal" _blank
-```
-
-``` mermaid 
-%%{init: {'theme': 'default'}}%%
+```mermaid
 sequenceDiagram
   participant TreeFactory
   participant RouteRegistry
@@ -267,5 +206,36 @@ sequenceDiagram
   ModuleFactory-->>LayoutFactory: JSX.Element (ModuleWrapper)
   LayoutFactory-->>PageFactory: JSX.Element (LayoutWrapper)
   PageFactory-->>TreeFactory: JSX.Element (PageWrapper)
-
 ```
+
+---
+
+## ✅ Example Flow: GalleryListView on Dashboard
+
+1. Portal config includes `GalleryListView` in `main` region.
+2. PageFactory builds layout → inserts ModuleFactory calls into each region.
+3. ModuleFactory loads `GalleryListView` via registry.
+4. Wrapped with `ModuleWrapper`, passing props from `PortalPageModuleMap`.
+5. Component renders.
+6. Admin clicks settings → `ModuleSettingsDialog` shown.
+7. Settings saved and module re-renders.
+
+---
+
+## ✅ What’s Next
+- Scaffold top-level factories: `PortalFactory`, `PageFactory`, `ModuleFactory`
+- Implement `ViewModelContentBuilderFactory` → integrate DyForm modules
+- Build shared `DyFormFactory`, `FieldRenderer`, `useDynamicFormState`
+- Add Theme-aware shells: `PortalWrapper`, `LayoutWrapper`, `PageWrapper`
+- Enable RouteWrapper usage during TreeFactory traversal
+
+---
+
+## ✅ Summary
+The Skylynx Client enables **portal-specific customization**, **metadata-driven rendering**, and **runtime modularity**. By combining factory-based composition with template metadata, we achieve:
+
+- High extensibility
+- Configurable layout + UX per tenant
+- Route-aware tree rendering
+- Thematic styling via `ThemeFactory`
+- Reuse across platforms (desktop/web/mobile)

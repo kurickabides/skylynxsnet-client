@@ -44,7 +44,23 @@ const skylynxPortalTreeSlice = createSlice({
       .addCase(
         loadSkylynxPortalTree.fulfilled,
         (state, action: PayloadAction<SkylynxPortalTree>) => {
-          state.tree = action.payload;
+          const tree = action.payload;
+
+          // 🛠 Patch PortalObject if not already present
+          if (!tree.PortalObject) {
+            tree.PortalObject = {} as any;
+          }
+
+          // 🛠 Patch all children to ensure targetObject is set
+          if (tree.children?.length) {
+            tree.children = tree.children.map((child) => ({
+              ...child,
+              targetObject: child.targetObject ?? ({} as any),
+              children: child.children ?? [],
+            }));
+          }
+
+          state.tree = tree;
           state.loading = false;
         }
       )

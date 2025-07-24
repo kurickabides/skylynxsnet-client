@@ -31,7 +31,7 @@ import { ethers } from "ethers";
 import AuthPage from "./pages/authPage";
 import AuthLayout from "./components/layouts/authLayout";
 import AppBootstrap from "./appBootstrap"; // ✅ Wrap app entry
-
+import { RouteRegistry } from "./config/routeRegistry";
 const AppContext = React.createContext(null);
 
 function getLibrary(provider: any): ethers.providers.Web3Provider {
@@ -142,6 +142,7 @@ function App() {
                           ) : null
                         )}
                       </Routes>
+                      <Routes>{RouteRegistry.getRoutes()}</Routes>
                     </ShellLayout>
                   }
                 />

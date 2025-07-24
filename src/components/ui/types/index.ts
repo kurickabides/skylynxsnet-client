@@ -1,6 +1,6 @@
 //Types for ui components
 import { ReactNode } from "react";
-import RouteItem from "../../../config/RouteItem";
+import { RouteItem } from "../../../config/types";
 
 export interface HeaderProps {
   open: boolean;
@@ -79,3 +79,4 @@ interface ViewEditLayoutProps {
   viewComponent: React.ReactNode;
   editComponent: React.ReactNode;
 }
+
