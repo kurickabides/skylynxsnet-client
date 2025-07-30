@@ -9,6 +9,7 @@
 
 import { GalleryItem } from "./types";
 import { SkylynxKey_APIKEY, SkylynxServer_URL } from "../../helpers/constants";
+import { IPortal } from "../../entities/portal";
 
 export const fetchUserPortals = async ({
   userID,
@@ -16,7 +17,7 @@ export const fetchUserPortals = async ({
 }: {
   userID: string;
   token: string;
-}): Promise<GalleryItem[]> => {
+}): Promise<IPortal[]> => {
   const res = await fetch(`${SkylynxServer_URL}/portals/byuser`, {
     method: "POST",
     headers: {

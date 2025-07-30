@@ -1,31 +1,36 @@
 // ================================================
-// ✅ Component: ModuleWrapper
-// File: components/ui/ModuleWrapper.tsx
-// Description: Reusable module container with collapsible header and settings icon
+// ✅ Component: ModuleFrame
+// Description: Generic UI wrapper with typed settings + collapsible UI
+// Author: NimbusCore.OpenAI
+// Architect: Chad Martin
+// Company: CryoRio
+// Filename: components/ui/ModuleFrame.tsx
 // ================================================
 
-import React, { FC, useState, ReactNode } from "react";
+import React, { useState } from "react";
 import { IconButton, Typography } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SettingsIcon from "@mui/icons-material/Settings";
+
 import ModuleSettingsDialog from "./ModuleSettingsDialog";
 import {
   ModuleContainer,
   ModuleHeader,
   ModuleInnerContent,
 } from "../styled/moduleWrapper";
-import { ModuleFrameProps } from "../types/uiWrappers";
-import { ImportExportOutlined } from "@mui/icons-material";
 
-const ModuleFrame: FC<ModuleFrameProps> = ({
+import { ModuleFrameProps, SkylynxModuleSettings } from "../types/uiWrappers";
+
+const ModuleFrame = <TSettings extends SkylynxModuleSettings>({
   settings,
   children,
   onSettingsUpdate,
-}) => {
+}: ModuleFrameProps<TSettings>): JSX.Element => {
   const [expanded, setExpanded] = useState(true);
-  const { title, showTitle = true } = settings;
   const [openSettings, setOpenSettings] = useState(false);
+
+  const { title, showTitle = true } = settings;
 
   return (
     <ModuleContainer>
@@ -52,7 +57,7 @@ const ModuleFrame: FC<ModuleFrameProps> = ({
               settings={settings}
               onClose={() => setOpenSettings(false)}
               onSave={(updatedSettings) => {
-                onSettingsUpdate?.(updatedSettings); // <-- Pass to parent
+                onSettingsUpdate?.(updatedSettings);
                 setOpenSettings(false);
               }}
             />

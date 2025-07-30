@@ -7,61 +7,46 @@
 // Filename: /modules/galleryListView/GalleryListView.tsx
 // ================================================
 
-import React, { useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
-import { selectModuleState } from "../../appStore/moduleStateSelector";
-import { setGalleryItems } from "./galleryListSlice";
-import { GalleryListViewProps, GalleryState } from "./types";
+import React from "react";
+import { GalleryListViewProps } from "./types";
 import ModuleFrame from "../../components/ui/module/moduleFrame";
 import ImageGridView from "../../components/ui/lists/ImageGridView";
 import ItemListView from "../../components/ui/lists/ItemListView";
 import ItemTableView from "../../components/ui/lists/ItemTableView";
-;
 
 const GalleryListView: React.FC<GalleryListViewProps> = ({
   items,
   itemsPerPage = 6,
   onItemClick,
   settings,
+  onSettingsUpdate,
   children,
 }) => {
-  const dispatch = useAppDispatch();
-  const [currentSettings, setCurrentSettings] =
-    useState<typeof settings>(settings);
-
-  React.useEffect(() => {
-    dispatch(setGalleryItems(items));
-  }, [items]);
-
-  const galleryItems = useAppSelector(
-    (state) =>
-      selectModuleState<GalleryState>(state, "gallerylist")?.items ?? []
-  );
-
   return (
-    <ModuleFrame
-      settings={currentSettings}
-      onSettingsUpdate={(updated) => setCurrentSettings(updated)}
-    >
-      {currentSettings.layoutVariant === "table" ? (
+    <ModuleFrame settings={settings} onSettingsUpdate={onSettingsUpdate}>
+      {settings.layoutVariant === "table" ? (
         <ItemTableView
-          items={galleryItems}
+          items={items}
           onItemClick={onItemClick}
-          settings={currentSettings}
+          onSettingsUpdate={onSettingsUpdate}
+          settings={settings}
         />
-      ) : currentSettings.layoutVariant === "list" ? (
+      ) : settings.layoutVariant === "list" ? (
         <ItemListView
-          items={galleryItems}
+          items={items}
           onItemClick={onItemClick}
-          settings={currentSettings}
+          onSettingsUpdate={onSettingsUpdate}
+          settings={settings}
         />
       ) : (
         <ImageGridView
-          items={galleryItems}
+          items={items}
           onItemClick={onItemClick}
-          settings={currentSettings}
+          onSettingsUpdate={onSettingsUpdate}
+          settings={settings}
         />
       )}
+      {children}
     </ModuleFrame>
   );
 };

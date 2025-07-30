@@ -1,13 +1,26 @@
-import React, { useEffect } from "react";
+// ================================================
+// ✅ Page: Dashboard
+// Description: Displays user's portals as a gallery using GalleryListContainer
+// Author: NimbusCore.OpenAI
+// Architect: Chad Martin
+// Company: CryoRio
+// Filename: pages/Dashboard.tsx
+// ================================================
+
+import React, { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../hooks/reduxHooks";
 import { selectAuth } from "../components/auth/authSlice";
 import { Helmet } from "react-helmet";
-import { FlexRowBetween } from "../theme/appStyles";
-import PageTitle from "../components/ui/gamming/pageTitle";
 import { APP_TITLE, PAGE_TITLE_DASHBOARD } from "../helpers/constants";
-import GalleryListView from "../modules/galleryListView/galleryListView ";
-import { GalleryModuleSettings } from "../modules/galleryListView/types";
+
+import GalleryListContainer from "../modules/galleryListView/GalleryListContainer";
+import {
+  GalleryItem,
+  GalleryModuleSettings,
+} from "../modules/galleryListView/types";
 import { fetchUserPortals } from "../modules/galleryListView/galleryListApi";
+import { IPortal } from "../entities/portal";
+
 import {
   setGalleryItems,
   selectGalleryItems,
@@ -18,51 +31,58 @@ const Dashboard: React.FC = () => {
   const authState = useAppSelector(selectAuth);
   const galleryItems = useAppSelector(selectGalleryItems);
 
-   const portalGallerySettings: GalleryModuleSettings = {
-     title: "My Portals",
-     showTitle: true,
-     showDescription: true,
-     layoutVariant: "grid",
-   };
+  // ✅ Dashboard controls the settings
+  const [settings, setSettings] = useState<GalleryModuleSettings>({
+    title: "My Portals",
+    showTitle: true,
+    showDescription: true,
+    layoutVariant: "grid",
+  });
 
   useEffect(() => {
     const loadPortals = async () => {
       if (!authState?.token) return;
 
       try {
-        console.log("authState.user:", authState.user.profile.userID);
-        console.log("Resolved userID:", authState.user?.id);
-        let userId: string = authState.user.profile.userID;
-        const portals = await fetchUserPortals({
+        const userId: string = authState.user.profile.userID;
+        const portals: IPortal[] = await fetchUserPortals({
           userID: userId,
           token: authState.token,
         });
 
-        // 🔁 Map portal shape to GalleryItem[]
-        const galleryItems = portals.map((p: any) => ({
+        const mapped: GalleryItem[] = portals.map((p: IPortal) => ({
           id: p.PortalID,
           label: p.PortalName,
-          description: `Status: [${p.Status}] ${p.Description}`, // 📝 append status in description
-          splashImage: p.SplashImage,
+          description: `Status: [${p.Status}] ${p.Description ?? ""}`,
+          splashImage: p.SplashImage ?? "default.png",
         }));
 
-        dispatch(setGalleryItems(galleryItems));
+        dispatch(setGalleryItems(mapped));
       } catch (err: any) {
         console.error("❌ Failed to load user portals:", err.message);
       }
     };
 
     loadPortals();
-  }, [authState.user, authState.token]);
+  }, [authState.user, authState.token, dispatch]);
 
   const handlePortalClick = (portalId: string) => {
     console.log("📦 Clicked Portal:", portalId);
   };
 
+  const handleSettingsUpdate = (updated: GalleryModuleSettings) => {
+    setSettings(updated);
+  };
+
   return (
     <>
-      <GalleryListView
-        settings={portalGallerySettings}
+      <Helmet>
+        <title>{`${PAGE_TITLE_DASHBOARD} | ${APP_TITLE}`}</title>
+      </Helmet>
+
+      <GalleryListContainer
+        settings={settings}
+        onSettingsUpdate={handleSettingsUpdate}
         items={galleryItems}
         onItemClick={handlePortalClick}
       />

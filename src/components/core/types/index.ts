@@ -9,6 +9,7 @@
 // Filename: types/skylynx/core/types.ts
 // ================================================
 import React, { ReactNode } from "react";
+import { Reducer } from "redux";
 import { IPortal } from "../../../entities/portal";
 
 export interface SkylynxPortalTreeState {
@@ -16,10 +17,22 @@ export interface SkylynxPortalTreeState {
   loading: boolean;
   error?: string;
 }
+//New interfacees move SkylynxPortalTreeState out of store
+export type PortalNamespace = "host" | string;
+
+export interface TreePair {
+  original: SkylynxPortalTree;
+  current: SkylynxPortalTree;
+}
+
+
 
 // Define shape of a registry entry
 export interface ITargetRegistryEntry {
-  data?: Record<string, any>;
+  data?: Record<string, ITargetComponent>;
+}
+export interface TargetRegistryStateCollection {
+  [namespace: string]: TargetRegistryState;
 }
 
 export enum RegistryStatus {
@@ -33,7 +46,24 @@ export interface TargetRegistryState {
   status: RegistryStatus;
 }
 
+export type RegistryNamespace = "host" | string;
 
+export interface ModuleRegistryEntry {
+  name: string;
+  component: React.FC<any>;
+  description?: string;
+}
+
+export interface RouteRegistryEntry {
+  path: string;
+  element: JSX.Element;
+  namespace: RegistryNamespace;
+}
+export interface ModuleRegistrationOptions {
+  RouteRegistryEntry: ModuleRegistryEntry;
+  namespace?: RegistryNamespace;
+  reducer?: Reducer;
+}
 
 export interface ProtosTargetTypeState {
   types: TemplateType[];
@@ -209,9 +239,19 @@ export interface ISkylynxViewModel {
   resolver?: IResolver | DyFormResolver;
   contextKey?: string; // optional tag
 }
+
+export interface ITargetObject extends SkylynxDataModel {
+  componentName?: string;
+  componentPath?: string;
+  ComponentConfig?: string;
+}
+
 //this has the Component information along with targt reocrds data they can be loaded into component if need like title and other info need to hydrate website
 export interface ITargetComponent {
-  data?: Record<string, SkylynxDataModel>; //targets record
+  componentName?: string;
+  componentPath?: string;
+  ComponentConfig?: string;
+  data?: Record<string, ITargetObject>; //targets record
 }
 
 export interface DyFormViewModel {

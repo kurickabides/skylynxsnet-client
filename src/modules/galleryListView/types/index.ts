@@ -19,14 +19,16 @@ export interface PortalGalleryItem extends GalleryItem {
   status?: string; // ✅ Status shown on hover
 }
 export interface GalleryModuleSettings extends SkylynxModuleSettings {
-  showDescription?: boolean;
-  layoutVariant?: "grid" | "table" | "list";
+  showDescription: boolean| true;
+  layoutVariant: "grid" | "table" | "list";
 }
-export interface GalleryListViewProps  {
-  items: GalleryItem[]; // List of cards to display
+
+export interface GalleryListViewProps {
+  items: GalleryItem[];
   itemsPerPage?: number;
-  onItemClick: (id: string) => void; // Called when an image or card is clicked
+  onItemClick: (id: string) => void;
   settings: GalleryModuleSettings;
+  onSettingsUpdate: (updated: GalleryModuleSettings) => void;
   children?: ReactNode;
 }
 

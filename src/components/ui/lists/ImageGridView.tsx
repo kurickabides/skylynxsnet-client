@@ -1,3 +1,12 @@
+// ================================================
+// ✅ Component: ImageGridView
+// Description: Renders GalleryItems in a responsive image grid with optional description
+// Author: NimbusCore.OpenAI
+// Architect: Chad Martin
+// Company: CryoRio
+// Filename: components/ui/lists/ImageGridView.tsx
+// ================================================
+
 import React from "react";
 import {
   GalleryCard,
@@ -6,11 +15,13 @@ import {
   GalleryLabel,
   GalleryDescription,
   GalleryContainer,
-} from "../styled/galleryParts"; 
+} from "../styled/galleryParts";
 import {
   FlexRowBetween,
   PaperContainer,
   FlexCenterRow,
+  Actions,
+  StyledPagination,
 } from "../../../theme/appStyles";
 import {
   GalleryItem,
@@ -22,15 +33,20 @@ const ImageGridView: React.FC<GalleryListViewProps> = ({
   itemsPerPage = 6,
   onItemClick,
   settings,
+  onSettingsUpdate, // ✅ Required even if unused
 }) => {
+  const [page, setPage] = React.useState(1);
+  const startIndex = (page - 1) * itemsPerPage;
+  const currentItems = items.slice(startIndex, startIndex + itemsPerPage);
+
   return (
     <>
       <GalleryContainer>
-        {items.map((item) => (
+        {currentItems.map((item) => (
           <GalleryCard
             key={item.id}
             onClick={() => onItemClick(item.id)}
-            title={`${item.description || ""}`}
+            title={item.description || ""}
           >
             <GalleryLabel>{item.label}</GalleryLabel>
             <GalleryImage
@@ -45,6 +61,14 @@ const ImageGridView: React.FC<GalleryListViewProps> = ({
           </GalleryCard>
         ))}
       </GalleryContainer>
+
+      <Actions>
+        <StyledPagination
+          count={Math.ceil(items.length / itemsPerPage)}
+          page={page}
+          onChange={(e, newPage) => setPage(newPage)}
+        />
+      </Actions>
     </>
   );
 };

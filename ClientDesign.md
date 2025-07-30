@@ -239,3 +239,93 @@ The Skylynx Client enables **portal-specific customization**, **metadata-driven 
 - Route-aware tree rendering
 - Thematic styling via `ThemeFactory`
 - Reuse across platforms (desktop/web/mobile)
+
+
+``` mermaid
+flowchart TD
+  subgraph ModuleRegistry
+    MR1[gallerylist name]
+    MR2[GalleryListView component]
+    MR3[galleryListSlice.reducer reducer]
+  end
+
+  subgraph Redux
+    RS[galleryListSlice.ts]
+    RS -->|registers reducer| MR3
+  end
+
+  subgraph UI Layer
+    GLV[GalleryListView.tsx]
+    GLC[GalleryListContainer.tsx]
+  end
+
+  MR2 --> GLV
+  MR3 --> GLC
+
+  GLC -->|renders| GLV
+  GLC -->|dispatch + selector| RS
+  MR1 -->|via register| ModuleRegistry
+```
+
+``` mermaid
+flowchart TD
+    A[Boot Host Portal APIKey] --> B[Load SkylynxPortalTree'host']
+    B --> C[Render Modules e.g. GalleryListView]
+
+    C --> D[Gallery triggers Load PortalB]
+    D --> E[loadSkylynxPortalTree PortalB]
+    E --> F[Hydrate + Render PortalB tree]
+```
+
+```mermaid
+sequenceDiagram
+  participant TreeFactory
+  participant RouteRegistry
+  participant PortalWrapperFactory
+  participant ThemeFactory
+  participant LayoutFactory
+  participant PageFactory
+  participant ModuleFactory
+  participant ModuleRegistry
+  participant ViewModelFactory
+
+  %% ✅ Hydration Phase - triggered after Portal tree loaded
+  TreeFactory->>RouteRegistry: register RoutePath with PageWrapper
+  TreeFactory->>PortalWrapperFactory: build PortalNode
+  PortalWrapperFactory->>ThemeFactory: build ThemeNode
+  ThemeFactory->>LayoutFactory: build LayoutNode
+
+  %% 🧠 Layout may exist without Pages
+  alt Layout has Pages
+    LayoutFactory->>PageFactory: build PageNode
+    PageFactory->>ModuleFactory: build ModuleNode
+  else No Pages
+    LayoutFactory->>ModuleFactory: build ModuleNode
+  end
+
+  %% 🧠 Module must resolve component and data
+  ModuleFactory->>ModuleRegistry: resolve UserProfileManager
+  ModuleRegistry-->>ModuleFactory: return LoadedComponent
+
+  ModuleFactory->>ViewModelFactory: resolve DyForm ViewModel
+  ViewModelFactory-->>ModuleFactory: return JSX element
+
+  %% ✅ Rendering stack (reversed)
+  ModuleFactory-->>LayoutFactory: return ModuleWrapper
+  LayoutFactory-->>ThemeFactory: return LayoutWrapper
+  ThemeFactory-->>PortalWrapperFactory: return ThemeWrapper
+  PortalWrapperFactory-->>TreeFactory: return PortalWrapper
+
+```
+# WebSite Loading Proces
+
+```mermaid
+graph TD
+  A[Load Metadata PortalTree] --> B[Hydrate Render Tree]
+  B --> C[Init Registries]
+  C --> D[ThemeRegistry]
+  C --> E[ModuleRegistry]
+  C --> F[RouteRegistry]
+  B --> G[TreeFactory Traversal]
+  G --> H[JSX Render]
+```

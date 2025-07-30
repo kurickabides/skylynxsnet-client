@@ -10,8 +10,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../appStore/store";
 import { GalleryItem, GalleryState } from "./types";
-import { moduleRegistry } from "../../appStore/moduleStateRegistry";
+import { ModuleRegistry } from "../../appStore/moduleStateRegistry";
 import { selectModuleState } from "../../appStore/moduleStateSelector";
+import { getCurrentNamespace } from "../../services/utils/resolvePortalNamespace";
+import GalleryListView from "./galleryListView "; // ✅ This is the real visual component
+
 const initialState: GalleryState = {
   items: [],
 };
@@ -29,8 +32,16 @@ const galleryListSlice = createSlice({
   },
 });
 
-// ✅ Step 3: Register reducer on load
-moduleRegistry.register("gallerylist", galleryListSlice.reducer);
+// ✅ Register module with reducer and component using correct shape
+ModuleRegistry.register({
+  namespace: getCurrentNamespace(),
+  reducer: galleryListSlice.reducer,
+  RouteRegistryEntry: {
+    name: "gallerylist",
+    component: GalleryListView,
+    description: "Gallery List UI Component + State",
+  },
+});
 
 export const { setGalleryItems, clearGalleryItems } = galleryListSlice.actions;
 

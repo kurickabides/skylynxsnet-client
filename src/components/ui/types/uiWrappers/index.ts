@@ -1,22 +1,25 @@
 import React, { ReactNode } from "react";
 import { SkylynxBaseWrapperProps } from "../../../core/types";
 import { IPortal } from "../../../../entities/portal";
+
 export interface SkylynxModuleSettings {
   title: string;
   showTitle?: boolean; // default: true
 }
 
 
-export interface ModuleFrameProps {
-  settings: SkylynxModuleSettings;
-  children: ReactNode;
-  onSettingsUpdate?: (newSettings: SkylynxModuleSettings) => void;
+export interface ModuleFrameProps<TSettings extends SkylynxModuleSettings = SkylynxModuleSettings> {
+  settings: TSettings;
+  onSettingsUpdate: (newSettings: TSettings) => void;
+  children: React.ReactNode;
 }
 
-export interface ModuleSettingsDialogProps {
+export interface ModuleSettingsDialogProps<
+  TSettings extends SkylynxModuleSettings = SkylynxModuleSettings
+> {
   open: boolean;
-  settings: SkylynxModuleSettings;
-  onSave: (updated: SkylynxModuleSettings) => void;
+  settings: TSettings;
+  onSave: (newSettings: TSettings) => void;
   onClose: () => void;
 }
 

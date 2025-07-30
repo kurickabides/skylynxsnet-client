@@ -1,13 +1,17 @@
 // ================================================
 // ✅ Component: ModuleSettingsDialog
 // Description: Dynamically renders form for any module settings interface
+// Notes:
+// - Uses generic type to support any SkylynxModuleSettings extension
+// - Syncs local state with incoming settings to reflect live updates
+// - Supports boolean, enum, string, and fallback rendering
 // Author: NimbusCore.OpenAI
 // Architect: Chad Martin
 // Company: CryoRio
 // Filename: components/ui/module/ModuleSettingsDialog.tsx
 // ================================================
 
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -28,25 +32,31 @@ import {
 import {
   SkylynxModuleSettings,
   ModuleSettingsDialogProps,
-} from "../types/uiWrappers/index";
+} from "../types/uiWrappers";
 
+// ✅ Enum field config for known setting keys
 const enumFields: Record<string, string[]> = {
   layoutVariant: ["grid", "list", "table"],
   viewMode: ["compact", "expanded", "minimal"],
-  // Add additional known enums here as needed
 };
 
+// ✅ Determines whether a field is one of the enum types
 const isEnumField = (key: string, value: any): boolean =>
   typeof value === "string" && enumFields[key] !== undefined;
 
-const ModuleSettingsDialog: FC<ModuleSettingsDialogProps> = ({
+const ModuleSettingsDialog = <TSettings extends SkylynxModuleSettings>({
   open,
   settings,
   onSave,
   onClose,
-}) => {
-  const [localSettings, setLocalSettings] =
-    useState<SkylynxModuleSettings>(settings);
+}: ModuleSettingsDialogProps<TSettings>): JSX.Element => {
+  // ✅ Local copy of settings used for editing inside dialog
+  const [localSettings, setLocalSettings] = useState<TSettings>(settings);
+
+  // ✅ Sync prop changes into local state when dialog is reopened with new settings
+  useEffect(() => {
+    setLocalSettings(settings);
+  }, [settings]);
 
   const handleChange = (field: string, value: any) => {
     setLocalSettings((prev) => ({ ...prev, [field]: value }));
@@ -54,10 +64,11 @@ const ModuleSettingsDialog: FC<ModuleSettingsDialogProps> = ({
 
   const handleSave = () => onSave(localSettings);
 
+  // ✅ Dynamic renderer for each settings field
   const renderField = (key: string, value: any) => {
     if (key === "id") return null;
 
-    // ✅ Hardcoded fields first
+    // ✅ Custom handling for known fields
     if (key === "title") {
       return (
         <TextField
@@ -86,7 +97,7 @@ const ModuleSettingsDialog: FC<ModuleSettingsDialogProps> = ({
       );
     }
 
-    // ✅ Boolean
+    // ✅ Boolean values → toggle switch
     if (typeof value === "boolean") {
       return (
         <FormControlLabel
@@ -102,7 +113,7 @@ const ModuleSettingsDialog: FC<ModuleSettingsDialogProps> = ({
       );
     }
 
-    // ✅ Enum string → RadioGroup
+    // ✅ Enum values → radio buttons
     if (isEnumField(key, value)) {
       return (
         <FormControl key={key} component="fieldset" margin="normal">
@@ -125,7 +136,7 @@ const ModuleSettingsDialog: FC<ModuleSettingsDialogProps> = ({
       );
     }
 
-    // ✅ Dropdown if array
+    // ✅ Array of values → dropdown
     if (Array.isArray(value)) {
       return (
         <FormControl key={key} fullWidth margin="normal">
@@ -144,7 +155,7 @@ const ModuleSettingsDialog: FC<ModuleSettingsDialogProps> = ({
       );
     }
 
-    // ✅ Fallback: string input
+    // ✅ Default fallback → text field
     return (
       <TextField
         key={key}

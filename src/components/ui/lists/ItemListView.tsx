@@ -31,6 +31,7 @@ const ItemListView: React.FC<GalleryListViewProps> = ({
   itemsPerPage = 6,
   onItemClick,
   settings,
+  onSettingsUpdate, // ✅ Required prop — even if unused
 }) => {
   const [page, setPage] = React.useState(1);
   const startIndex = (page - 1) * itemsPerPage;
@@ -58,42 +59,34 @@ const ItemListView: React.FC<GalleryListViewProps> = ({
             <ListItemCard key={item.id}>
               <StyledCardContent>
                 <Button onClick={() => onItemClick(item.id)}>View</Button>
-               
-                  {/* ✅ Left side: Image + Label + Description */}
-                  <FlexCenterRow style={{ gap: 12, flex: 1 }}>
-                    {/* Thumbnail Image */}
-                    <img
-                      src={`backgrounds/${item.splashImage}`}
-                      alt={item.label}
-                      style={{
-                        width: THUMBNAIL_SIZE,
-                        height: THUMBNAIL_SIZE,
-                        objectFit: "cover",
-                        borderRadius: 4,
-                      }}
-                    />
 
-                    <div>
-                      <PageTitleText>{item.label}</PageTitleText>
-                      {settings?.showDescription && item.description && (
-                        <div
-                          style={{
-                            maxWidth: 400,
-                            wordWrap: "break-word",
-                            whiteSpace: "normal",
-                          }}
-                        >
-                          <ParagraphText>{item.description}</ParagraphText>
-                        </div>
-                      )}
-                    </div>
-                  </FlexCenterRow>
-
-
-                
-                
-                
-                
+                {/* ✅ Left side: Image + Label + Description */}
+                <FlexCenterRow style={{ gap: 12, flex: 1 }}>
+                  <img
+                    src={`backgrounds/${item.splashImage}`}
+                    alt={item.label}
+                    style={{
+                      width: THUMBNAIL_SIZE,
+                      height: THUMBNAIL_SIZE,
+                      objectFit: "cover",
+                      borderRadius: 4,
+                    }}
+                  />
+                  <div>
+                    <PageTitleText>{item.label}</PageTitleText>
+                    {settings?.showDescription && item.description && (
+                      <div
+                        style={{
+                          maxWidth: 400,
+                          wordWrap: "break-word",
+                          whiteSpace: "normal",
+                        }}
+                      >
+                        <ParagraphText>{item.description}</ParagraphText>
+                      </div>
+                    )}
+                  </div>
+                </FlexCenterRow>
               </StyledCardContent>
             </ListItemCard>
           );

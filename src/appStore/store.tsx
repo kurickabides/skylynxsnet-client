@@ -8,7 +8,7 @@
 // ================================================
 
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import { moduleRegistry } from "./moduleStateRegistry";
+import { ModuleRegistry } from "./moduleStateRegistry";
 
 // Slice reducers
 import authReducer from "../components/auth/authSlice";
@@ -28,7 +28,7 @@ export const store = configureStore({
     skylynxPortalTree: skylynxPortalTreeReducer,
     protosTargetType: protosTargetTypeReducer,
     targetRegistry: targetRegistryReducer, // ✅ ADD THIS
-    moduleRegistry: moduleRegistry.getCombinedReducer(), // ✅ Still scoped
+    moduleRegistry: ModuleRegistry.getCombinedReducer(), // ✅ Still scoped
   },
   preloadedState: preloadedAuthState ? { auth: preloadedAuthState } : undefined,
 });

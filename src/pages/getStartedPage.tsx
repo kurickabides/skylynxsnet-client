@@ -1,4 +1,4 @@
-import AboutUsPageContent from "../components/home/aboutUs";
+import AboutUsPageContent from "./aboutUs";
 
 const AboutUSPage = () => {
   return <AboutUsPageContent />;

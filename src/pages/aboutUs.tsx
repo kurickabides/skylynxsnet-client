@@ -11,7 +11,7 @@ import {
   PaperContainer,
   CardRoot,
   FixedHeightCard,
-} from "../../theme/appStyles";
+} from "../theme/appStyles";
 
 const AboutUsPageContent = () => {
   return (

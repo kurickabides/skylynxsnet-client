@@ -1,6 +1,6 @@
 // ================================================
 // ✅ Factory: TreeFactory
-// Description: Recursively renders the SkylynxRenderNode tree using factories
+// Description: Root dispatcher that delegates rendering based on template type
 // Author: NimbusCore.OpenAI
 // Architect: Chad Martin
 // Company: CryoRio
@@ -8,36 +8,42 @@
 // ================================================
 
 import React from "react";
-import { SkylynxRenderNode } from "../../components/core/types";
-import { ProtosTargetTypeEnum } from "../../entities/portal";
-
+import {
+  SkylynxRenderNode,
+  ISkylynxViewModel,
+} from "../../components/core/types";
 import { PortalFactory } from "./portalFactory";
 import { LayoutFactory } from "./layoutFactory";
 import { PageFactory } from "./pageFactory";
 import { ModuleFactory } from "./moduleFactory";
-import { DyFormFactory } from "./dyFormFactory";
+import { ThemeFactory } from "./themeFactory";
 
+/**
+ * Recursively traverses SkylynxRenderNode tree and delegates rendering to the appropriate factory
+ * @param node SkylynxRenderNode<ISkylynxViewModel>
+ * @param parent (optional) Parent node for context-aware rendering
+ */
 export function TreeFactory(
-  node: SkylynxRenderNode,
-  parent?: SkylynxRenderNode
-): JSX.Element | null {
-  if (!node || !node.template?.templateType?.TargetTypeName) return null;
-
-  const type = node.template.templateType.TargetTypeName;
-
-  switch (type) {
-    case ProtosTargetTypeEnum.Portal:
+  node: SkylynxRenderNode<ISkylynxViewModel>,
+  parent?: SkylynxRenderNode<ISkylynxViewModel>
+): JSX.Element {
+  switch (node.template?.templateType.TargetTypeName) {
+    case "Portal":
       return PortalFactory(node);
-    case ProtosTargetTypeEnum.Layout:
+    case "Theme":
+      return ThemeFactory(node);
+    case "Layout":
       return LayoutFactory(node);
-    case ProtosTargetTypeEnum.Page:
+    case "Page":
       return PageFactory(node);
-    case ProtosTargetTypeEnum.Module:
+    case "Module":
       return ModuleFactory(node);
-    case ProtosTargetTypeEnum.DyForm:
-      return DyFormFactory(node);
     default:
-      console.warn(`🚫 Unknown node type: ${type}`);
-      return null;
+      return (
+        <div style={{ color: "red", padding: "1rem" }}>
+          ⚠️ Unknown template type:{" "}
+          <b>{node.template?.templateType.TargetTypeName || "N/A"}</b>
+        </div>
+      );
   }
 }

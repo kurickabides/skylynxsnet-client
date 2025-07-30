@@ -1,55 +1,83 @@
 // ================================================
 // ✅ API: skylynxPortalTreeAPI
-// Description: Fetches Skylynx Portal Template Tree + Target Types
+// Description: Fetches Skylynx Portal Template Tree + Target Types (Axios + Logging)
 // Author: NimbusCore.OpenAI
 // Architect: Chad Martin
 // Company: CryoRio
-// Filename: skylynxPortalTreeAPI.ts
+// Filename: services/api/skylynxPortalTreeAPI.ts
 // ================================================
 
-import { SkylynxKey_APIKEY, SkylynxServer_URL } from "../../helpers/constants";
+import axios from "axios";
 import { SkylynxPortalTree, TemplateType } from "./types";
+import { SkylynxKey_APIKEY, SkylynxServer_URL } from "../../helpers/constants";
+import { PortalNamespace } from "./types";
 
 /**
- * ✅ Fetches full template tree for a given portal (default or active)
- * @param token Bearer auth token
- * @returns SkylynxPortalTree
+ * ✅ Loads the Skylynx portal tree for a specific namespace
+ * Falls back to default/host portal if none provided
+ * @param namespace e.g. "host", "portalA", "portalB"
  */
 export const fetchSkylynxPortalTree = async (
+  namespace?: PortalNamespace
 ): Promise<SkylynxPortalTree> => {
-  const res = await fetch(`${SkylynxServer_URL}/nimbus/templates/portals`, {
-    method: "GET",
-    headers: {
-      "skyx-api-key": SkylynxKey_APIKEY,
-    },
-  });
+  const endpoint = namespace
+    ? `${SkylynxServer_URL}/nimbus/templates/portals?namespace=${namespace}`
+    : `${SkylynxServer_URL}/nimbus/templates/portals`;
 
-  if (!res.ok) {
-    const msg = await res.text();
-    throw new Error(msg || "Failed to load Skylynx portal template tree.");
+  try {
+    console.info(
+      `🔁 [Skylynx] Fetching portal tree: GET ${endpoint} (namespace: ${
+        namespace || "default"
+      })`
+    );
+
+    const response = await axios.get<SkylynxPortalTree>(endpoint, {
+      headers: {
+        "skyx-api-key": SkylynxKey_APIKEY,
+      },
+    });
+
+    console.info(`✅ [Skylynx] Portal tree loaded (${namespace || "default"})`);
+    return response.data;
+  } catch (error: any) {
+    const status = error?.response?.status || "Unknown";
+    const message =
+      error?.response?.data?.message || error?.message || "Unexpected error";
+
+    console.error(
+      `❌ [Skylynx] Failed to load portal tree (${status}) [${
+        namespace || "default"
+      }]: ${message}`
+    );
+    throw new Error(`Skylynx portal tree load failed: ${message}`);
   }
-
-  return res.json();
 };
 
 /**
- * ✅ Fetches all supported ProtosTargetTypes from DB
- * @param token Bearer auth token
- * @returns List of ProtosTargetType
+ * ✅ Loads all supported ProtosTargetTypes
  */
-export const fetchProtosTargetTypes = async (
-): Promise<TemplateType[]> => {
-  const res = await fetch(`${SkylynxServer_URL}/nimbus/templates/types`, {
-    method: "GET",
-    headers: {
-      "skyx-api-key": SkylynxKey_APIKEY,
-    },
-  });
+export const fetchProtosTargetTypes = async (): Promise<TemplateType[]> => {
+  const endpoint = `${SkylynxServer_URL}/nimbus/templates/types`;
 
-  if (!res.ok) {
-    const msg = await res.text();
-    throw new Error(msg || "Failed to load ProtosTargetTypes.");
+  try {
+    console.info(`🔁 [Skylynx] Fetching target types: GET ${endpoint}`);
+
+    const response = await axios.get<TemplateType[]>(endpoint, {
+      headers: {
+        "skyx-api-key": SkylynxKey_APIKEY,
+      },
+    });
+
+    console.info(`✅ [Skylynx] Target types loaded successfully.`);
+    return response.data;
+  } catch (error: any) {
+    const status = error?.response?.status || "Unknown";
+    const message =
+      error?.response?.data?.message || error?.message || "Unexpected error";
+
+    console.error(
+      `❌ [Skylynx] Failed to load target types (${status}): ${message}`
+    );
+    throw new Error(`Skylynx target types load failed: ${message}`);
   }
-
-  return res.json();
 };

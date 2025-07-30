@@ -1,13 +1,14 @@
-import { SkylynxDataModel } from "../../components/core/types";
+import { ITargetObject, SkylynxDataModel } from "../../components/core/types";
 
-export interface IPortal extends  SkylynxDataModel{
-  portalID: string;
-  portalName: string;
+export interface IPortal extends ITargetObject {
+  PortalID: string;
+  PortalName: string;
   Description: string;
-  createdAt?: Date;
+  SplashImage: string;
+  Status: string;
 }
 
-export interface IModule extends SkylynxDataModel {
+export interface IModule extends ITargetObject {
   moduleID: string;
   moduleName: string; // e.g. "UserProfileManager"
   ModuleDescription?: string;
@@ -15,7 +16,7 @@ export interface IModule extends SkylynxDataModel {
   ContentFilePath?: boolean;
 }
 
-export interface PortalPageModel extends SkylynxDataModel {
+export interface PortalPageModel extends ITargetObject {
   pageId: string;
   pageName: string; // e.g. "Account Settings"
   routePath: string; // e.g. "/settings/profile"
@@ -29,7 +30,7 @@ export interface PortalPageModuleMap {
   sortOrder: number;
 }
 
-export interface PortalLayoutModel extends SkylynxDataModel {
+export interface PortalLayoutModel extends ITargetObject {
   layoutId: string;
   name: string;
   templateKey: string; // e.g. "2ColWithSidebar"
