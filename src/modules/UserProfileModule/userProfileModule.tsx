@@ -9,13 +9,17 @@
 
 import React from "react";
 import { useAppSelector } from "../../hooks/reduxHooks";
-import ModuleWrapper from "../../components/ui/module/moduleFrame";
+import ModuleFrame from "../../components/ui/module/moduleFrame";
 import DyFormRenderer from "../../components/dyForm/dyFormRenderer";
 import { TreeUtils } from "../../services/utils/treeUtils";
 import { resolveFormContextFromDataModel } from "../../services/utils/formResolverUtils";
 import { SkylynxModuleSettings } from "../../components/ui/types/uiWrappers";
+import { UserProfileModuleProps } from "./types";
 
-const UserProfileModule: React.FC = () => {
+const UserProfileModule: React.FC<UserProfileModuleProps> = ({
+   settings,
+  onSettingsUpdate,
+}) => {
   const portalTree = useAppSelector((state) => state.skylynxPortalTree.tree);
 
   if (!portalTree) return <div>Loading Portal Tree...</div>;
@@ -37,13 +41,13 @@ const UserProfileModule: React.FC = () => {
   };
 
   return (
-    <ModuleWrapper settings={moduleSettings}>
+    <ModuleFrame settings={moduleSettings} onSettingsUpdate={onSettingsUpdate}>
       <DyFormRenderer
         dyFormTemplate={context.dyFormTemplate}
         viewModel={context.viewModel}
         dataModel={context.dataModel}
       />
-    </ModuleWrapper>
+    </ModuleFrame>
   );
 };
 

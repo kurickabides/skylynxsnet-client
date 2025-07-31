@@ -73,3 +73,13 @@ export enum ProtosTargetTypeEnum {
   ViewModel = "ViewModel",
   ThemeColors = "ThemeColors",
 }
+
+export interface ITheme extends ITargetObject {
+  ThemeID: string;
+  ThemeName: string; // e.g., "Skylynx Themes"
+  ThemeOption: string;
+  DefaultMode: "light" | "dark";
+  Description?: string;
+  IsBase?: boolean;
+}
+

@@ -12,9 +12,16 @@ import {
   SkylynxPortalTree,
   ITargetRegistryEntry,
   PortalNamespace,
+  ITargetComponent,
+  ITargetObject,
 } from "../../components/core/types";
 import { TargetRegistry } from "../../components/core/targetRegistry/targetRegistry";
-import { IPortal } from "../../entities/portal";
+import {
+  IPortal,
+  IModule,
+  PortalLayoutModel,
+  PortalPageModel,
+} from "../../entities/portal";
 
 /**
  * Recursively resolves all target metadata for a SkylynxTemplateNode subtree.
@@ -41,26 +48,28 @@ async function hydrateNode(
         template.targetID,
         namespace
       );
-      if (resolvedEntry.data ) {
-          let targetObject = resolvedEntry.data[template.targetID];
-      hydratedNode.targetObject = {
-        componentName: targetObject.componentName,
-        componentPath: targetObject.componentPath,
-        ComponentConfig: targetObject.ComponentConfig,
-        data: targetObject.data ?? {},
-      };
+      
+      const targetObj = resolvedEntry.data as ITargetComponent;
 
+      if (targetObj) {
+        hydratedNode.targetObject = {
+          componentName: targetObj.componentName,
+          componentPath: targetObj.componentPath,
+          ComponentConfig: targetObj.ComponentConfig,
+          data: targetObj as ITargetObject,
+        };
       }
     } catch (err) {
       console.warn(
         `⚠️ Failed to resolve target for ${template.templateName} (${template.templateType.TargetTypeName}):`,
         err
       );
-      hydratedNode.targetObject = { 
-        componentName:"",
-        componentPath:"",
+      hydratedNode.targetObject = {
+        componentName: "",
+        componentPath: "",
         ComponentConfig: "",
-        data: {} };
+        data: {},
+      };
     }
   }
 
@@ -99,15 +108,12 @@ export async function hydrateRenderTree(
         namespace
       );
 
-      if ( resolvedEntry.data ) {
-          const portalObj = resolvedEntry.data[PortalTemplate.templateType?.TargetTypeName]
-      if (portalObj.data ) {
-          let pObj = portalObj.data[PortalTemplate.targetID] as IPortal
-            hydratedTree.PortalObject = pObj;
-      
-      }
+      const targetObj = resolvedEntry.data as ITargetComponent;
 
-    }
+      if (targetObj) {
+        let pObj = targetObj as IPortal;
+        hydratedTree.PortalObject = pObj;
+      }
     } catch (err) {
       console.warn(
         `⚠️ Failed to resolve target for PortalTemplate (${PortalTemplate.templateType.TargetTypeName}):`,
@@ -119,7 +125,9 @@ export async function hydrateRenderTree(
         Description: "Missing Description",
         SplashImage: "Missing Image",
         Status: "Error",
-        componentName:""
+        componentName: "",
+        componentPath: "",
+        ComponentConfig: "",
       };
     }
   }

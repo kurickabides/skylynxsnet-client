@@ -251,7 +251,7 @@ export interface ITargetComponent {
   componentName?: string;
   componentPath?: string;
   ComponentConfig?: string;
-  data?: Record<string, ITargetObject>; //targets record
+  data?: ITargetObject; //targets record
 }
 
 export interface DyFormViewModel {
@@ -321,12 +321,11 @@ export interface DyFormDomain {
 export interface SkylynxBaseWrapperProps {
   renderNode: SkylynxRenderNode;
   children?: ReactNode;
-  className?: string;
   style?: React.ElementType;
-  debugId?: string;
   visible?: boolean;
-  themeContext?: any; // Will be used by ThemeFactory
+  themeContext?: any;
 }
+
 export interface SkylynxRenderNode<
   VM = ISkylynxViewModel,
   DM = SkylynxDataModel,
@@ -336,6 +335,10 @@ export interface SkylynxRenderNode<
   viewModel: VM;
   dataModel: DM;
   targetComponent?: TC;
-  children?: SkylynxRenderNode<any, any, any>[];
+  children?: SkylynxRenderNode<
+    ISkylynxViewModel,
+    SkylynxDataModel,
+    ITargetComponent
+  >[];
 }
 

@@ -24,6 +24,8 @@ import { APP_TITLE } from "../../../helpers/constants";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 import { selectAuth } from "../../auth/authSlice";
 import { HeaderProps } from "../types";
+import ModuleSettingsDialog from "../module/ModuleSettingsDialog";
+import { UserProfileSettings } from "../types/uiWrappers";
 
 const Header: FC<HeaderProps> = ({
   open,
@@ -38,6 +40,12 @@ const Header: FC<HeaderProps> = ({
   const authState = useAppSelector(selectAuth);
   const isLoggedIn = authState.isLoggedIn;
 
+  //handle avatar click
+  const handleAvatarClick = () => {
+    console.log("🧑 Avatar clicked!");
+    setShowDialog(true);
+  };
+
   const ThemeToggleIcon = useDefaultTheme ? (
     <Brightness3Icon />
   ) : (
@@ -45,6 +53,16 @@ const Header: FC<HeaderProps> = ({
   );
 
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  // State for module settings dialog
+   const [showDialog, setShowDialog] = useState(false);
+
+   // 🔧 Combine user data with settings
+   const userProfileSettings: UserProfileSettings = {
+   title: "User Profile",
+    showTitle: true,
+  ...authState.user.profile,
+};
 
   useEffect(() => {
     if (isLoggedIn && authState.user.profile.photo) {
@@ -84,6 +102,15 @@ const Header: FC<HeaderProps> = ({
           <ToolbarContent />
         </HeaderAppBar>
       )}
+      <ModuleSettingsDialog<UserProfileSettings>
+        open={showDialog}
+        settings={userProfileSettings}
+        onClose={() => setShowDialog(false)}
+        onSave={(updated) => {
+          console.log("🔄 Saved settings:", updated);
+          setShowDialog(false);
+        }}
+      />
     </>
   );
 
@@ -127,7 +154,11 @@ const Header: FC<HeaderProps> = ({
             <IconButton size="small" onClick={handleDisconnect} color="inherit">
               <LogoutIcon />
             </IconButton>
-            <IconButton size="small" color="inherit">
+            <IconButton
+              size="small"
+              color="inherit"
+              onClick={handleAvatarClick}
+            >
               <Avatar
                 src={avatarUrl || undefined}
                 sx={{ width: 32, height: 32 }}

@@ -11,24 +11,6 @@ import { getEnvVar } from "../config/envHydrator";
 export const APP_TITLE = getEnvVar("REACT_APP_NAME") || "SkyLynxs";
 export const FOOTER_TEXT = `${new Date().getFullYear()} @Skylynx LLC`;
 
-// 🔐 Auth + External Services
-export const FIREBASE_APIKEY =
-  getEnvVar("FIREBASE_APIKEY") || "AIzaSyC9q_8eQGjKTHcvV-QCjy8UK61jnqb5Tkw";
-export const PLAID_CLIENT_ID =
-  getEnvVar("PLAID_CLIENT_ID") || "608336c497bb9a00116921b3";
-export const PLAID_SECRET =
-  getEnvVar("PLAID_SECRET") || "4666cc684b82d97367074ff2520b1e";
-
-// 🌐 Stellar (Test)
-export const Stellar_IssuerAct =
-  getEnvVar("Stellar_IssuerAct") ||
-  "GBW3KKPZJXDWIQKMN6ZTM4PFK5K5NSAREQHIBWAYT6BRAFF6OTDF754N";
-export const Stellar_DistAct =
-  getEnvVar("Stellar_DistAct") ||
-  "GDA5NSJ5AA4SD7DQ32ZE3XNRN5EDHW6P26OYRCZSUXWA5OJ6PABBAOEA";
-export const StellarAnchorClient_SKEY =
-  getEnvVar("StellarAnchorClient_SKEY") || "";
-
 // 🌐 App URLs
 export const AuthServer_URL =
   getEnvVar("AuthServer_URL") || "http://localhost:5001/api/auth/";

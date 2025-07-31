@@ -1,12 +1,16 @@
 import React, { ReactNode } from "react";
 import { SkylynxBaseWrapperProps } from "../../../core/types";
 import { IPortal } from "../../../../entities/portal";
+import { SkylynxNet_UserProfile } from "../../../auth/types";
+;
 
 export interface SkylynxModuleSettings {
   title: string;
   showTitle?: boolean; // default: true
 }
-
+export interface UserProfileSettings
+  extends SkylynxModuleSettings,
+    SkylynxNet_UserProfile {}
 
 export interface ModuleFrameProps<TSettings extends SkylynxModuleSettings = SkylynxModuleSettings> {
   settings: TSettings;
