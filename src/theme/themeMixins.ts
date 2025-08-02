@@ -54,6 +54,21 @@ const ContainerMixins = {
     left: "15rem",
     width: "30rem",
   },
+  pdfCanvas: {
+    width: 800,
+    height: 1000,
+  },
+  markupBox: {
+    x: 100,
+    y: 100,
+    width: 200,
+    height: 100,
+    fill: "rgba(255,0,0,0.4)",
+  },
+  markupText: {
+    fontSize: 16,
+    color: "black",
+  },
   toolbar: toolbarMixin,
 };
 

@@ -20,6 +20,8 @@ import {
 } from "../modules/galleryListView/types";
 import { fetchUserPortals } from "../modules/galleryListView/galleryListApi";
 import { IPortal } from "../entities/portal";
+import EDPDFModule  from "../modules/edPDFModule/edPDFModule";
+import { EDPDFModuleSettings } from "../modules/edPDFModule/types";
 
 import {
   setGalleryItems,
@@ -30,6 +32,47 @@ const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
   const authState = useAppSelector(selectAuth);
   const galleryItems = useAppSelector(selectGalleryItems);
+  //const [pdfSettings = useAppSelector(selectGalleryItems);
+
+const pdfSetting: EDPDFModuleSettings = {
+  title: "Engineering Markup Preview",
+  showTitle: true,
+
+  layoutVariant: "pdf", // or "canvas" if rendering w/o PDF
+
+  // 📄 PDF Content & Toolbar
+  pdfPath: "/content/sample.pdf",
+  showToolbar: true,
+  enablePhotoOverlay: true,
+  enableFormAnnotations: true,
+
+  // 🔍 Zoom & Pan
+  enableZoom: true,
+  enablePan: true,
+  defaultZoomLevel: 1.25,
+  persistViewport: true,
+
+  // 📐 Engineering Scale
+  drawingScale: "1:500",
+  enableDynamicScale: true,
+  showScaleIndicator: true,
+  showRulerOverlay: true,
+
+  // 🧰 Markup Tools
+  defaultTool: "drawRect",
+  markupColor: "#FF0000",
+  highlightOnHover: true,
+  snapToGrid: false,
+
+  // 📄 Page Navigation
+  enablePageNav: true,
+
+  // 💾 Persistence
+  autoSaveInterval: 60, // seconds
+  markupDataSourceID: "DATASET-MARKUP-001",
+};
+
+
 
   // ✅ Dashboard controls the settings
   const [settings, setSettings] = useState<GalleryModuleSettings>({
@@ -38,6 +81,8 @@ const Dashboard: React.FC = () => {
     showDescription: true,
     layoutVariant: "grid",
   });
+
+
 
   useEffect(() => {
     const loadPortals = async () => {
@@ -74,6 +119,10 @@ const Dashboard: React.FC = () => {
     setSettings(updated);
   };
 
+   const handlePdfSettingsUpdate = (updated: EDPDFModuleSettings) => {
+     //setSettings(updated);
+   };
+
   return (
     <>
       <Helmet>
@@ -86,7 +135,10 @@ const Dashboard: React.FC = () => {
         items={galleryItems}
         onItemClick={handlePortalClick}
       />
-      
+      <EDPDFModule
+        settings={pdfSetting}
+        onSettingsUpdate={handlePdfSettingsUpdate}
+      ></EDPDFModule>
     </>
   );
 };
