@@ -9,10 +9,10 @@
 
 import styled from "@emotion/styled";
 
-export const PDFWrapper = styled("div")({
+export const PDFWrapper = styled("div")(({ theme }) => ({
   position: "relative",
-  display: "inline-block",
-  width: "fit-content",
-  height: "fit-content",
-});
-
+  width: "100%",
+  height: "auto",
+  maxHeight: "600px", // Optional
+  overflow: "auto", // ✅ Add this
+}));

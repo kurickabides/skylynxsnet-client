@@ -12,7 +12,6 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { PdfViewerProps } from "./types";
 import {
   ContainerPdfViewer,
-  ScrollWrapperPdfViewer,
   PageWrapperPdfViewer,
 } from "./styled";
 
@@ -27,13 +26,13 @@ const PdfViewer: React.FC<PdfViewerProps> = ({
 }) => {
   return (
     <ContainerPdfViewer>
-      <ScrollWrapperPdfViewer style={{ maxHeight }}>
+
         <Document file={fileUrl} onLoadSuccess={onLoadSuccess}>
           <PageWrapperPdfViewer>
             <Page pageNumber={currentPage} scale={zoomLevel} />
           </PageWrapperPdfViewer>
         </Document>
-      </ScrollWrapperPdfViewer>
+
     </ContainerPdfViewer>
   );
 };

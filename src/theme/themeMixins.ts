@@ -59,8 +59,8 @@ const ContainerMixins = {
     height: 1000,
   },
   markupBox: {
-    x: 100,
-    y: 100,
+    x: 500,
+    y: 700,
     width: 200,
     height: 100,
     fill: "rgba(255,0,0,0.4)",

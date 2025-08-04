@@ -14,8 +14,7 @@ import Box from "@mui/material/Box";
 export const ContainerPdfViewer = styled(Box)<{ maxHeight?: number }>(
   ({ maxHeight, theme }) => ({
     width: "100%",
-    overflowY: "auto",
-    overflowX: "hidden",
+    overflow: "visible", // ✅ prevent hidden or scroll triggers
     maxHeight: maxHeight ? `${maxHeight}px` : "auto",
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: theme.shape.borderRadius,
@@ -37,8 +36,6 @@ export const PageWrapperPdfViewer = styled("div")(({ theme }) => ({
 // 🧭 Scroll container with horizontal scroll
 export const ScrollWrapperPdfViewer = styled("div")({
   width: "100%",
-  overflowY: "auto",
-  overflowX: "auto", // ✅ enable horizontal scroll
   padding: "1rem",
   display: "flex",
   flexDirection: "column",

@@ -40,7 +40,7 @@ const MarkupLayer: React.FC<MarkupLayerProps> = ({ zoom, stageRef }) => {
           <Text
             x={markupBox.x + 10}
             y={markupBox.y + 10}
-            text="Sample Markup"
+            text="Map Center"
             fontSize={markupText.fontSize}
             fill={markupText.color}
           />
