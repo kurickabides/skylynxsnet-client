@@ -22,11 +22,19 @@ import { fetchUserPortals } from "../modules/galleryListView/galleryListApi";
 import { IPortal } from "../entities/portal";
 import EDPDFModule  from "../modules/edPDFModule/edPDFModule";
 import { EDPDFModuleSettings } from "../modules/edPDFModule/types";
-
+import { MapMapModuleSettings } from "../modules/merginMapMapModule/types";
 import {
   setGalleryItems,
   selectGalleryItems,
 } from "../modules/galleryListView/galleryListSlice";
+import MapMapModule  from "../modules/merginMapMapModule/merginMapMapModule";
+import ESRIMapModule from "../modules/mapEsriModule/esriMapModule";
+import {
+  BasemapType,
+} from "../components/esri/types";
+import {
+  ESRIMapModuleSettings,
+} from "../modules/mapEsriModule/types";
 
 const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,55 +42,74 @@ const Dashboard: React.FC = () => {
   const galleryItems = useAppSelector(selectGalleryItems);
   //const [pdfSettings = useAppSelector(selectGalleryItems);
 
-const pdfSetting: EDPDFModuleSettings = {
-  title: "Engineering Markup Preview",
+const merginMapSetting: MapMapModuleSettings = {
+  title: "Site Conditions Map",
   showTitle: true,
-
-  layoutVariant: "pdf", // or "canvas" if rendering w/o PDF
-
-  // 📄 PDF Content & Toolbar
-  pdfPath: "/content/sample.pdf",
+  url:"https://public.merginmaps.com/projects/Advanced%20Business%20Solutio/sampleProject/",
+  height: 600,
   showToolbar: true,
-  enablePhotoOverlay: true,
-  enableFormAnnotations: true,
+  enableDrawingTools: false,
 
-  // 🔍 Zoom & Pan
-  enableZoom: true,
-  enablePan: true,
-  defaultZoomLevel: 1.25,
-  persistViewport: true,
-
-  // 📐 Engineering Scale
-  drawingScale: "1:500",
-  enableDynamicScale: true,
-  showScaleIndicator: true,
-  showRulerOverlay: true,
-
-  // 🧰 Markup Tools
-  defaultTool: "drawRect",
-  markupColor: "#FF0000",
-  highlightOnHover: true,
-  snapToGrid: false,
-
-  // 📄 Page Navigation
-  enablePageNav: true,
-
-  // 💾 Persistence
-  autoSaveInterval: 60, // seconds
-  markupDataSourceID: "DATASET-MARKUP-001",
+  defaultZoom: 14,
+  baseLayerType: "osm",
+ 
+};
+//ESRI Map settings
+const esriMapSetting: ESRIMapModuleSettings = {
+  title: "ESRI Base Map Viewer",
+  showTitle: true,
+  center: [-122.6765, 45.5231], // Portland, OR
+  zoom: 12,
+  basemap: BasemapType.Streets,
+  height: 500,
 };
 
+  //Fix to work like GalleryModuleSettings
+  const pdfSetting: EDPDFModuleSettings = {
+    title: "Engineering Markup Preview",
+    showTitle: true,
 
+    layoutVariant: "pdf", // or "canvas" if rendering w/o PDF
 
-  // ✅ Dashboard controls the settings
+    // 📄 PDF Content & Toolbar
+    pdfPath: "/content/sample.pdf",
+    showToolbar: true,
+    enablePhotoOverlay: true,
+    enableFormAnnotations: true,
+
+    // 🔍 Zoom & Pan
+    enableZoom: true,
+    enablePan: true,
+    defaultZoomLevel: 1.25,
+    persistViewport: true,
+
+    // 📐 Engineering Scale
+    drawingScale: "1:500",
+    enableDynamicScale: true,
+    showScaleIndicator: true,
+    showRulerOverlay: true,
+
+    // 🧰 Markup Tools
+    defaultTool: "drawRect",
+    markupColor: "#FF0000",
+    highlightOnHover: true,
+    snapToGrid: false,
+
+    // 📄 Page Navigation
+    enablePageNav: true,
+
+    // 💾 Persistence
+    autoSaveInterval: 60, // seconds
+    markupDataSourceID: "DATASET-MARKUP-001",
+  };
+
+  // ✅ Dashboard controls the settings get from db
   const [settings, setSettings] = useState<GalleryModuleSettings>({
-    title: "My Portals",
+    title: "Portals",
     showTitle: true,
     showDescription: true,
     layoutVariant: "grid",
   });
-
-
 
   useEffect(() => {
     const loadPortals = async () => {
@@ -119,9 +146,9 @@ const pdfSetting: EDPDFModuleSettings = {
     setSettings(updated);
   };
 
-   const handlePdfSettingsUpdate = (updated: EDPDFModuleSettings) => {
-     //setSettings(updated);
-   };
+  const handlePdfSettingsUpdate = (updated: EDPDFModuleSettings) => {
+    //setSettings(updated);
+  };
 
   return (
     <>
@@ -139,6 +166,18 @@ const pdfSetting: EDPDFModuleSettings = {
         settings={pdfSetting}
         onSettingsUpdate={handlePdfSettingsUpdate}
       ></EDPDFModule>
+      <MapMapModule
+        settings={merginMapSetting}
+        onSettingsUpdate={(settings: MapMapModuleSettings) => {
+          console.log("Mergin Map Settings Updated:", settings);
+        }}
+      ></MapMapModule>
+      <ESRIMapModule
+        settings={esriMapSetting}
+        onSettingsUpdate={(settings: ESRIMapModuleSettings) => {
+          console.log("ESRI Map Settings Updated:", settings);
+        }}
+      />
     </>
   );
 };

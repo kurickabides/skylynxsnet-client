@@ -16,10 +16,3 @@ export const PDFWrapper = styled("div")({
   height: "fit-content",
 });
 
-export const OverlayCanvas = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  pointer-events: none;
-`;

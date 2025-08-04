@@ -8,15 +8,14 @@
 // ================================================
 
 import React, { useRef, useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
 import { Stage, Layer, Rect, Text } from "react-konva";
 import ModuleFrame from "../../components/ui/module/moduleFrame";
-import { PDFWrapper, OverlayCanvas } from "./styled";
+import PdfViewer from "../../components/pdf/pdfViewer";
+import PdfToolbar from "../../components/pdf/pdfToolbar";
+import { PDFWrapper } from "./styled";
 import ContainerMixins from "../../theme/themeMixins";
 import { EDPDFModuleProps } from "./types";
-
-// Use local worker (previously broken due to CORS when CDN used)
-pdfjs.GlobalWorkerOptions.workerSrc = "/workers/pdf.worker.min.js";
+import MarkupLayer from "../../components/pdf/markupLayer"; // ✅ Fixed missing .tsx extension
 
 const EDPDFModule: React.FC<EDPDFModuleProps> = ({
   settings,
@@ -29,58 +28,46 @@ const EDPDFModule: React.FC<EDPDFModuleProps> = ({
 
   const { pdfCanvas, markupBox, markupText } = ContainerMixins;
 
-  // Use settings or fallback zoom
-  const zoom = settings.defaultZoomLevel ?? 1.0;
-  const scaledWidth = pdfCanvas.width * zoom;
-  const scaledHeight = pdfCanvas.height * zoom;
+  const zoomLevel = settings.defaultZoomLevel ?? 1;
+  const scaledWidth = pdfCanvas.width * zoomLevel;
+  const scaledHeight = pdfCanvas.height * zoomLevel;
 
-  const pdfUrl = settings.pdfPath ?? "http://localhost:3000/content/sample.pdf";
+  const pdfUrl = settings.pdfPath ?? "/content/sample.pdf";
+
+  const handleLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setNumPages(numPages);
+  };
 
   return (
     <ModuleFrame settings={settings} onSettingsUpdate={onSettingsUpdate}>
-      <PDFWrapper style={{ width: scaledWidth, height: scaledHeight }}>
-        <Document
-          file={pdfUrl}
-          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+      {settings.showToolbar && (
+        <PdfToolbar
+          currentPage={currentPage}
+          numPages={numPages ?? 1}
+          zoomLevel={zoomLevel}
+          onZoomChange={() => {}}
+          onPageChange={setCurrentPage}
+        />
+      )}
+
+      <PDFWrapper style={{ width: "100%" }}>
+        <PdfViewer
+          fileUrl={pdfUrl}
+          zoomLevel={zoomLevel}
+          maxHeight={settings.maxHeight || 600}
+          currentPage={currentPage}
+          onLoadSuccess={handleLoadSuccess}
+        />
+
+        <MarkupLayer
+          zoom={zoomLevel}
+          stageRef={stageRef}
+          height={scaledHeight}
         >
-          <Page
-            pageNumber={currentPage}
-            width={scaledWidth}
-            renderAnnotationLayer={false}
-            renderTextLayer={false}
-          />
-        </Document>
-
-        {/* Markup Canvas Overlay */}
-        <OverlayCanvas style={{ width: scaledWidth, height: scaledHeight }}>
-          <Stage
-            ref={stageRef}
-            width={scaledWidth}
-            height={scaledHeight}
-            scaleX={zoom}
-            scaleY={zoom}
-          >
-            <Layer>
-              <Rect
-                x={markupBox.x}
-                y={markupBox.y}
-                width={markupBox.width}
-                height={markupBox.height}
-                fill={markupBox.fill}
-              />
-              <Text
-                x={markupBox.x + 10}
-                y={markupBox.y + 10}
-                text="Sample Markup"
-                fontSize={markupText.fontSize}
-                fill={markupText.color}
-              />
-            </Layer>
-          </Stage>
-        </OverlayCanvas>
-
-        {children}
+        </MarkupLayer>
       </PDFWrapper>
+
+      {children}
     </ModuleFrame>
   );
 };
