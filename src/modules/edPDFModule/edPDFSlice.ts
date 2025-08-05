@@ -17,18 +17,31 @@ import EDPDFView from "../../components/pdf/pdfViewer";
 
 const initialState: EDPDFModuleState = {
   settings: {
-    title: "Engineering Drawing",
+    title: "Engineering Markup Preview",
     showTitle: true,
-    pdfPath: "/content/sample.pdf",
-    defaultZoomLevel: 1.25,
+    layoutVariant: "pdf",
+    pdfPath: "/content/Orlando_Part1.pdf",
+    showToolbar: true,
+    enablePhotoOverlay: true,
+    enableFormAnnotations: true,
     enableZoom: true,
     enablePan: true,
-    enablePageNav: true,
-    enableFormAnnotations: true,
-    showToolbar: true,
+    defaultZoomLevel: 1.25,
+    persistViewport: true,
+    drawingScale: "1:500",
+    enableDynamicScale: true,
+    showScaleIndicator: true,
+    showRulerOverlay: true,
+    defaultTool: "drawRect",
     markupColor: "#FF0000",
+    highlightOnHover: true,
+    snapToGrid: false,
+    enablePageNav: true,
+    autoSaveInterval: 60,
+    markupDataSourceID: "DATASET-MARKUP-001",
   },
 };
+
 
 const edPDFSlice = createSlice({
   name: "edpdfmodule",

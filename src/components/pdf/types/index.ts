@@ -32,11 +32,12 @@ export interface PdfToolbarProps {
   zoomLevel: number;
   onPageChange: (newPage: number) => void;
   onZoomChange: (newZoom: number) => void;
-}
+  onSave: () => void; }
 
 export interface MarkupLayerProps {
   zoom: number;
   stageRef: RefObject<any>;
+  layerRef: React.RefObject<any>;
   height?: number;
   children?: React.ReactNode;
 }

@@ -13,8 +13,11 @@ import { OverlayCanvas } from "./styled";
 import ContainerMixins from "../../theme/themeMixins";
 import { MarkupLayerProps } from "./types";
 
-
-const MarkupLayer: React.FC<MarkupLayerProps> = ({ zoom, stageRef }) => {
+const MarkupLayer: React.FC<MarkupLayerProps> = ({
+  zoom,
+  stageRef,
+  layerRef,
+}) => {
   const { pdfCanvas, markupBox, markupText } = ContainerMixins;
 
   const baseWidth = pdfCanvas.width;
@@ -29,7 +32,8 @@ const MarkupLayer: React.FC<MarkupLayerProps> = ({ zoom, stageRef }) => {
         scaleX={zoom}
         scaleY={zoom}
       >
-        <Layer>
+        {/* ✅ Name the layer so it can be targeted via stageRef.findOne(...) */}
+        <Layer name="markupLayer" ref={layerRef}>
           <Rect
             x={markupBox.x}
             y={markupBox.y}

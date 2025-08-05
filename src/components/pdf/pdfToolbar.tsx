@@ -1,6 +1,6 @@
 // ================================================
 // ✅ Component: PdfToolbar
-// Description: Toolbar for zoom and page navigation controls
+// Description: Toolbar for zoom, navigation, and save controls
 // Author: NimbusCore.OpenAI
 // Architect: Chad Martin
 // Company: CryoRio
@@ -14,11 +14,14 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import SaveIcon from "@mui/icons-material/Save";
+
 import {
   ToolbarPdfViewer,
   ButtonGroupPdfViewer,
   PageInfoPdfViewer,
 } from "./styled";
+
 import { PdfToolbarProps } from "./types";
 
 const PdfToolbar: React.FC<PdfToolbarProps> = ({
@@ -27,6 +30,7 @@ const PdfToolbar: React.FC<PdfToolbarProps> = ({
   zoomLevel,
   onPageChange,
   onZoomChange,
+  onSave, // ✅ Added here
 }) => {
   const handleZoomIn = () => {
     onZoomChange(Math.min(zoomLevel + 0.25, 3));
@@ -53,6 +57,11 @@ const PdfToolbar: React.FC<PdfToolbarProps> = ({
         <IconButton onClick={handleZoomIn} title="Zoom In">
           <ZoomInIcon />
         </IconButton>
+        {onSave && (
+          <IconButton onClick={onSave} title="Save PDF">
+            <SaveIcon />
+          </IconButton>
+        )}
       </ButtonGroupPdfViewer>
 
       <PageInfoPdfViewer>

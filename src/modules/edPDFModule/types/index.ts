@@ -103,4 +103,6 @@ export interface EDPDFModuleProps {
   settings: EDPDFModuleSettings;
   onSettingsUpdate: (settings: EDPDFModuleSettings) => void;
   children?: React.ReactNode;
+  onSave: () => void;
+  stageRef: React.RefObject<any>;
 }

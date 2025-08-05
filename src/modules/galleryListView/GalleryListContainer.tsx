@@ -18,6 +18,7 @@ const GalleryListContainer: React.FC<GalleryListViewProps> = ({
   itemsPerPage = 6,
   onItemClick,
   settings,
+  onSettingsUpdate, // 🔁 this is the key fix
   children,
 }) => {
   const dispatch = useAppDispatch();
@@ -30,19 +31,23 @@ const GalleryListContainer: React.FC<GalleryListViewProps> = ({
     dispatch(setGalleryItems(items));
   }, [items]);
 
+  const handleSettingsUpdate = (updated: GalleryModuleSettings) => {
+    setCurrentSettings(updated);
+    if (onSettingsUpdate) {
+      onSettingsUpdate(updated); // 🔁 send update back to parent
+    }
+  };
+
   return (
     <GalleryListView
       items={galleryItems}
       itemsPerPage={itemsPerPage}
       onItemClick={onItemClick}
       settings={currentSettings}
-      onSettingsUpdate={(updated: GalleryModuleSettings) =>
-        setCurrentSettings(updated)
-      }
+      onSettingsUpdate={handleSettingsUpdate}
     >
       {children}
     </GalleryListView>
   );
 };
-
 export default GalleryListContainer;

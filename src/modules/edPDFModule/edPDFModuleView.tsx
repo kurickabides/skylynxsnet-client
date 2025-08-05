@@ -1,41 +1,80 @@
 // ================================================
-// ✅ Component: EDPDFModule
+// ✅ Component: EDPDFModuleView
 // Description: Engineering Design Markup Module (PDF version)
 // Author: NimbusCore.OpenAI
 // Architect: Chad Martin
 // Company: CryoRio
-// Filename: /modules/EDPDFModule/EDPDFModule.tsx
+// Filename: /modules/EDPDFModule/EDPDFModuleView.tsx
 // ================================================
 
 import React, { useRef, useState } from "react";
-import { Stage, Layer, Rect, Text } from "react-konva";
+import { PDFDocument } from "pdf-lib";
+import saveAs from "file-saver";
 import ModuleFrame from "../../components/ui/module/moduleFrame";
 import PdfViewer from "../../components/pdf/pdfViewer";
 import PdfToolbar from "../../components/pdf/pdfToolbar";
 import { PDFWrapper } from "./styled";
 import ContainerMixins from "../../theme/themeMixins";
 import { EDPDFModuleProps } from "./types";
-import MarkupLayer from "../../components/pdf/markupLayer"; // ✅ Fixed missing .tsx extension
+import MarkupLayer from "../../components/pdf/markupLayer";
+import { convertKonvaToPdfLib } from "../../services/utils/convertKonvaToPdfLib";
 
-const EDPDFModule: React.FC<EDPDFModuleProps> = ({
+const EDPDFModuleView: React.FC<EDPDFModuleProps> = ({
   settings,
   onSettingsUpdate,
+  onSave,
+  stageRef,
   children,
 }) => {
-  const stageRef = useRef<any>(null);
+  const layerRef = useRef<any>(null); // ✅ New layer ref
   const [numPages, setNumPages] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [zoomLevel, setZoomLevel] = useState<number>(
+    settings.defaultZoomLevel ?? 1
+  );
 
-  const { pdfCanvas, markupBox, markupText } = ContainerMixins;
+  const { pdfCanvas } = ContainerMixins;
 
-  const zoomLevel = settings.defaultZoomLevel ?? 1;
   const scaledWidth = pdfCanvas.width * zoomLevel;
   const scaledHeight = pdfCanvas.height * zoomLevel;
-
   const pdfUrl = settings.pdfPath ?? "/content/sample.pdf";
 
   const handleLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
+  };
+
+  const handleZoomChange = (newZoom: number) => {
+    setZoomLevel(newZoom);
+  };
+
+  const handleSave = async () => {
+    try {
+      console.log("📥 Starting save...");
+      const existingPdfBytes = await fetch(pdfUrl).then((res) =>
+        res.arrayBuffer()
+      );
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const page = pdfDoc.getPage(currentPage - 1);
+
+      const layer = layerRef.current;
+      if (!layer) throw new Error("Markup layer not found.");
+      console.log("✅ Markup layer retrieved:", layer);
+
+      convertKonvaToPdfLib(layer, page, {
+        pageHeight: page.getHeight(),
+        defaultColor: { r: 1, g: 0, b: 0 },
+      });
+
+      const pdfBytes = await pdfDoc.save();
+      saveAs(
+        new Blob([pdfBytes], { type: "application/pdf" }),
+        "annotated.pdf"
+      );
+      console.log("✅ Annotated PDF saved.");
+    } catch (error) {
+      console.error("❌ Save PDF failed:", error);
+      alert("Failed to save annotated PDF.");
+    }
   };
 
   return (
@@ -45,8 +84,9 @@ const EDPDFModule: React.FC<EDPDFModuleProps> = ({
           currentPage={currentPage}
           numPages={numPages ?? 1}
           zoomLevel={zoomLevel}
-          onZoomChange={() => {}}
+          onZoomChange={handleZoomChange}
           onPageChange={setCurrentPage}
+          onSave={handleSave}
         />
       )}
 
@@ -62,9 +102,9 @@ const EDPDFModule: React.FC<EDPDFModuleProps> = ({
         <MarkupLayer
           zoom={zoomLevel}
           stageRef={stageRef}
+          layerRef={layerRef} // ✅ Pass to layer
           height={scaledHeight}
-        >
-        </MarkupLayer>
+        />
       </PDFWrapper>
 
       {children}
@@ -72,4 +112,4 @@ const EDPDFModule: React.FC<EDPDFModuleProps> = ({
   );
 };
 
-export default EDPDFModule;
+export default EDPDFModuleView;

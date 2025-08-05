@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 export const ContainerPdfViewer = styled(Box)<{ maxHeight?: number }>(
   ({ maxHeight, theme }) => ({
     width: "100%",
+    // 🚫 Remove scrollbars here
     overflow: "visible", // ✅ prevent hidden or scroll triggers
     maxHeight: maxHeight ? `${maxHeight}px` : "auto",
     border: `1px solid ${theme.palette.divider}`,
@@ -22,6 +23,7 @@ export const ContainerPdfViewer = styled(Box)<{ maxHeight?: number }>(
     padding: theme.spacing(1),
   })
 );
+
 
 // 📄 Wrapper around each individual PDF page
 export const PageWrapperPdfViewer = styled("div")(({ theme }) => ({
