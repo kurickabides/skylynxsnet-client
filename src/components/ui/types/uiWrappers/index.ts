@@ -7,6 +7,7 @@ import { SkylynxNet_UserProfile } from "../../../auth/types";
 export interface SkylynxModuleSettings {
   title: string;
   showTitle?: boolean; // default: true
+  height: number;
 }
 export interface UserProfileSettings
   extends SkylynxModuleSettings,
@@ -45,4 +46,15 @@ export interface PageWrapperProps extends SkylynxBaseWrapperProps {
 
 export interface DyFormWrapperProps extends SkylynxBaseWrapperProps {
   themeKey?: string; // Optional override for theming
+}
+
+export interface AuthModuleSettings extends SkylynxModuleSettings {
+  enableSignup: boolean;
+  signupFormTemplate?: string; // e.g., "tmpSignupForm"
+  requireEmailVerification: boolean;
+  requirePhoneVerification: boolean;
+  enableCaptcha: boolean;
+  captchaType?: "reCAPTCHA" | "hCaptcha";
+  autoLoginAfterSignup?: boolean;
+  defaultRedirect?: string;
 }

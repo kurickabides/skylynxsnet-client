@@ -32,8 +32,8 @@ import { EDPDFModuleSettings } from "../modules/edPDFModule/types";
 import MapMapModule from "../modules/merginMapMapModule/merginMapMapModule";
 import { MapMapModuleSettings } from "../modules/merginMapMapModule/types";
 
-import ESRIMapModule from "../modules/mapEsriModule/esriMapModule";
-import { ESRIMapModuleSettings } from "../modules/mapEsriModule/types";
+import ESRIMapModuleContainer from "../modules/esriMapModule/esriMapModuleContainer";
+import { ESRIMapModuleSettings } from "../modules/esriMapModule/types";
 import { BasemapType } from "../components/esri/types";
 
 const Dashboard: React.FC = () => {
@@ -46,6 +46,7 @@ const Dashboard: React.FC = () => {
     showTitle: true,
     showDescription: true,
     layoutVariant: "grid",
+    height: 600,
   });
 
  const [pdfSettings, setPdfSettings] = useState<EDPDFModuleSettings>({
@@ -71,27 +72,23 @@ const Dashboard: React.FC = () => {
    enablePageNav: true,
    autoSaveInterval: 60,
    markupDataSourceID: "DATASET-MARKUP-001",
+   height: 600,
  });
 
-  const merginMapSetting: MapMapModuleSettings = {
-    title: "Site Conditions Map",
-    showTitle: true,
-    url: "https://public.merginmaps.com/projects/Advanced%20Business%20Solutio/sampleProject/",
-    height: 600,
-    showToolbar: true,
-    enableDrawingTools: false,
-    defaultZoom: 14,
-    baseLayerType: "osm",
-  };
 
-  const esriMapSetting: ESRIMapModuleSettings = {
-    title: "ESRI Base Map Viewer",
-    showTitle: true,
-    center: [-122.6765, 45.5231], // Portland, OR
-    zoom: 12,
-    basemap: BasemapType.Streets,
-    height: 500,
-  };
+ const [esriLocationSettings, setESRIViewSettings] = useState<ESRIMapModuleSettings>({
+   title: "ESRI Base Map Viewer",
+   showTitle: true,
+   center: [-122.6765, 45.5231], // Portland, OR
+   zoom: 15,
+   basemap: BasemapType.Streets,
+   height: 500,
+   showScaleBar: true,
+   enableDraw: false,
+   showLegend: true,
+   showLayerList: true,
+   layerVisibility: {},
+ });
 
   useEffect(() => {
     const loadPortals = async () => {
@@ -131,6 +128,11 @@ const Dashboard: React.FC = () => {
     setPdfSettings(updated);
   };
 
+const handleESRIViewSettingsUpdate = (updated: ESRIMapModuleSettings) => {
+  setESRIViewSettings(updated);
+};
+
+
   return (
     <>
       <Helmet>
@@ -149,18 +151,9 @@ const Dashboard: React.FC = () => {
         onSettingsUpdate={handlePDfSettingsUpdate}
       />
 
-      <MapMapModule
-        settings={merginMapSetting}
-        onSettingsUpdate={(settings: MapMapModuleSettings) => {
-          console.log("Mergin Map Settings Updated:", settings);
-        }}
-      />
-
-      <ESRIMapModule
-        settings={esriMapSetting}
-        onSettingsUpdate={(settings: ESRIMapModuleSettings) => {
-          console.log("ESRI Map Settings Updated:", settings);
-        }}
+      <ESRIMapModuleContainer
+        settings={esriLocationSettings}
+        onSettingsUpdate={handleESRIViewSettingsUpdate}
       />
     </>
   );

@@ -329,3 +329,150 @@ graph TD
   B --> G[TreeFactory Traversal]
   G --> H[JSX Render]
 ```
+#  SAFe Agile Scaling 
+```mermaid
+graph TD
+  A[Portfolio Level] -->|Epics & Funding| B[Large Solution Level]
+  A -->|Strategic Themes| C[Program Level]
+  B -->|Capabilities| C
+  C -->|Features| D[Team Level]
+  D -->|User Stories| E[Agile Teams]
+
+  subgraph Portfolio Level
+    A1[Lean Portfolio Mgmt]
+    A2[Enterprise Architect]
+    A3[Epic Owners]
+    A1 --> A2
+    A2 --> A3
+    A3 --> A
+  end
+
+  subgraph Large Solution Level Optional
+    B1[Solution Train Engineer]
+    B2[Solution Architect]
+    B3[Solution Mgmt]
+    B1 --> B2
+    B2 --> B3
+    B3 --> B
+  end
+
+  subgraph Program Level
+    C1[Release Train Engineer RTE]
+    C2[System Architect]
+    C3[Product Manager]
+    C4[Program Backlog]
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C4 --> C
+  end
+
+  subgraph Team Level
+    D1[Scrum Master]
+    D2[Product Owner]
+    D3[Dev Team]
+    D4[Team Backlog]
+    D1 --> D2
+    D2 --> D3
+    D3 --> D4
+    D4 --> D
+  end
+
+  subgraph Agile Teams
+    E1[Scrum / Kanban / XP]
+    E --> E1
+  end
+```
+
+## CAPTCHA VALIDATION FLOW (Best Practice)
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant reCAPTCHA/hCaptcha Server
+    participant Skylynx API
+
+    Browser->>reCAPTCHA/hCaptcha Server: Get challenge token
+    Browser->>Skylynx API: Submit form + captcha token
+    Skylynx API->>reCAPTCHA/hCaptcha Server: Verify token via secret key
+    reCAPTCHA/hCaptcha Server-->>Skylynx API: Valid/Invalid
+    Skylynx API-->>Browser: Accept or Reject
+
+```
+## Portal Module and User Settings Flow Diagram
+
+```mermaid
+
+flowchart TD
+  subgraph Global
+    GPS(GlobalPortalSettings)
+    GMS(GlobalModuleSettings)
+  end
+
+  GPS -->|used during| CreatePortal
+  GMS -->|used during| AddModuleToPortal
+
+  CreatePortal --> PS(PortalSettings)
+  AddModuleToPortal --> MS(ModuleSettings)
+
+  PS --> PortalRuntime
+  MS --> ModuleRuntime
+
+  US(UserSettings) --> ModuleRuntime
+
+
+```
+
+## Summary: Updated Schema Layer Diagram
+
+```mermaid
+erDiagram
+
+  SystemValueTypes {
+    string ValueType PK
+    string Description
+    boolean IsStructured
+  }
+
+  SettingKeys {
+    UUID SettingKeyID PK
+    string KeyName
+    string Label
+    string ValueType FK
+    UUID DomainID
+  }
+
+  PortalSettings {
+    UUID PortalID FK
+    UUID SettingKeyID FK
+    string Value
+  }
+
+  ModuleSettings {
+    UUID PortalModuleID FK
+    UUID SettingKeyID FK
+    UUID RoleID FK
+    string Value
+  }
+
+  GlobalModuleSettings {
+    UUID PortalModuleID FK
+    UUID SettingKeyID FK
+    UUID RoleID FK
+    string Value
+  }
+
+  GlobalPortalSettings {
+    UUID SettingKeyID FK
+    string Value
+  }
+
+  SettingKeys ||--|| SystemValueTypes : uses
+  PortalSettings ||--|| SettingKeys : has
+  ModuleSettings ||--|| SettingKeys : has
+  GlobalModuleSettings ||--|| SettingKeys : has
+  GlobalPortalSettings ||--|| SettingKeys : has
+
+  ```
+
+  2946338F-DBAE-4BF9-AE8E-8BC8C42559E9 B7423668-3549-48F1-9A1D-EFF8F5FF1C8B	

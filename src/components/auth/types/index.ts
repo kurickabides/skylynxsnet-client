@@ -127,6 +127,19 @@ export interface SkylynxNet_UserProfile {
 }
 
 
+export interface SkylynxNet_SignUpSettings {
+  userProviderId: string;
+  getUsername: boolean;
+  getEmail: string;
+  confirmEmail: boolean;
+  phoneNumber?: string;
+  confirmPhoneNumber: boolean;
+  enableTwoFactor: boolean;
+  getUserProfilePersonalInfo: boolean;
+  getUserProfileAdressVMInfo: boolean;
+  getUserProfileBillingVMInfo: boolean;
+}
+
 export interface SkylynxNet_PasswordResetResponse {
   email: string;
   requestType: string;

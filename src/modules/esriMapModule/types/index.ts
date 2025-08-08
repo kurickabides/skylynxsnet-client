@@ -11,14 +11,21 @@ import { SkylynxModuleSettings } from "../../../components/ui/types/uiWrappers";
 import { BasemapType } from "../../../components/esri/types";
 
 export interface ESRIMapModuleSettings extends SkylynxModuleSettings {
-  center: [number, number]; // [longitude, latitude]
+  center: [number, number];
   zoom: number;
   basemap: BasemapType;
-  height?: number;
+  showScaleBar: boolean;
+  enableDraw: boolean;
+  showLegend: boolean;
+  showLayerList: boolean;
+  layerVisibility?: Record<string, boolean>; // layerID => visible
 }
 
 export interface ESRIMapModuleProps {
   settings: ESRIMapModuleSettings;
   onSettingsUpdate: (settings: ESRIMapModuleSettings) => void;
   children?: React.ReactNode;
+}
+export interface ESRIMapModuleState {
+  settings: ESRIMapModuleSettings;
 }
