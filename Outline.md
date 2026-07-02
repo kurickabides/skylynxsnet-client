@@ -32,9 +32,9 @@ npm run build
 ```
 
 
-And then run `npm run start`, and visit `localhost:3000` in your browser to see the app in action.
+And then run `npm run dev`, and visit `localhost:3000` in your browser to see the app in action.
 
 ```
-npm run start
+npm run dev
 ```
 

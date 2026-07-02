@@ -474,5 +474,3 @@ erDiagram
   GlobalPortalSettings ||--|| SettingKeys : has
 
   ```
-
-  2946338F-DBAE-4BF9-AE8E-8BC8C42559E9 B7423668-3549-48F1-9A1D-EFF8F5FF1C8B	
